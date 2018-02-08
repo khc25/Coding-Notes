@@ -1,0 +1,27 @@
+\BOOKMARK [1][-]{section.1}{Print out the code}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Hello world!}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Template}{}% 3
+\BOOKMARK [1][-]{section.3}{Data type}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Variable and Constant}{section.3}% 5
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Numerical}{subsection.3.1}% 6
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Character}{subsection.3.1}% 7
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Logic}{subsection.3.1}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.4}{Other}{subsection.3.1}% 9
+\BOOKMARK [1][-]{section.4}{Basic Operators}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Type of Operators}{section.4}% 11
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Number Operator}{subsection.4.1}% 12
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Comparative Operator}{subsection.4.1}% 13
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Logical Operator}{subsection.4.1}% 14
+\BOOKMARK [3][-]{subsubsection.4.1.4}{Conditional Operator}{subsection.4.1}% 15
+\BOOKMARK [3][-]{subsubsection.4.1.5}{Comma operator}{subsection.4.1}% 16
+\BOOKMARK [1][-]{section.5}{Method}{}% 17
+\BOOKMARK [1][-]{section.6}{Flow control}{}% 18
+\BOOKMARK [2][-]{subsection.6.1}{If else statement}{section.6}% 19
+\BOOKMARK [2][-]{subsection.6.2}{Switch statement}{section.6}% 20
+\BOOKMARK [1][-]{section.7}{Loop}{}% 21
+\BOOKMARK [2][-]{subsection.7.1}{While Loop}{section.7}% 22
+\BOOKMARK [2][-]{subsection.7.2}{Do-while Loop}{section.7}% 23
+\BOOKMARK [2][-]{subsection.7.3}{For Loop}{section.7}% 24
+\BOOKMARK [1][-]{section.8}{Class}{}% 25
+\BOOKMARK [2][-]{subsection.8.1}{Constructor}{section.8}% 26
+\BOOKMARK [2][-]{subsection.8.2}{this}{section.8}% 27

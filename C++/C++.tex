@@ -1,0 +1,254 @@
+\documentclass[a4paper]{article}
+
+\def\npart{I}
+\def\nterm {Sem 2}
+\def\nyear {2017-2018}
+\def\nlecturer {Brian}
+\def\ncourse {C++}
+
+\input{header}
+
+\usepackage{listings}
+
+
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+
+
+\begin{document}
+
+\maketitle
+
+
+\tableofcontents
+
+\section{Print out the code}
+\subsection{Hello world!}
+\begin{lstlisting}
+    #include<stdio.h>
+    #include<iostream>
+    // A comment
+    int main(void)
+    {
+    printf("Hello World\n");
+    return 0;
+    }
+\end{lstlisting}
+
+
+
+\section{Template}
+\begin{lstlisting}
+ #include <iostream>
+ using namespace std;
+ int main(){
+           float hkd;
+           float result;
+           cin >>hk;
+           result=hkd*14.2
+           cout <<result; // print out the result
+ }
+
+\end{lstlisting}
+
+
+
+\section{Data type}
+\subsection{Variable and Constant}
+
+\subsubsection{Numerical}
+\begin{itemize}
+\item int: Integer type
+\item flaot, double: 
+\end{itemize}
+
+\begin{remark}
+How is Float works:\\
+\\
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+ $\frac{1}{2}$&$ \frac{1}{2}^2$&$\frac{1}{2}^3 $&$\frac{1}{2}^4 $&$ \frac{1}{2}^5 $&$\frac{1}{2}^6 $&$\frac{1}{2}^7 $&$\frac{1}{2}^8$\\
+\hline
+\end{tabular}
+\\
+How is Double work:\\
+\\
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+ $\frac{1}{2}$&$ \frac{1}{2}^2$&$\frac{1}{2}^3 $&$\frac{1}{2}^4 $&$ \frac{1}{2}^5 $&$\frac{1}{2}^6 $&$\frac{1}{2}^7 $&$\frac{1}{2}^8$&$\frac{1}{2}^9$&$ \frac{1}{2}^{10}$&$\frac{1}{2}^{11} $&$\frac{1}{2}^{12}$ & $\frac{1}{2}^{13}$ &$\frac{1}{2}^{14} $&$\frac{1}{2}^{15} $&$\frac{1}{2}^{16}$\\
+\hline
+\end{tabular}
+\end{remark}
+\begin{eg}
+
+
+\end{eg}
+
+\subsubsection{Character}
+
+\begin{itemize}
+\item char:
+\end{itemize}
+
+\subsubsection{Logic}
+
+\begin{itemize}
+\item bool:Boolean (true, false)
+\end{itemize}
+
+\subsubsection{Other}
+
+\begin{itemize}
+\item void:
+\end{itemize}
+
+
+\section{Basic Operators}
+\subsection{Type of Operators}
+
+\subsubsection{Number Operator}
+
+
+\subsubsection{Comparative Operator}
+This operators structure will return to boolean
+\begin{lstlisting}
+\\Equality operators
+== // equal to
+!= // not equal to
+
+\\Relational operators
+>  // greater than
+>=  // greater and equal than
+<  // 
+<=  //
+\end{lstlisting}
+
+\subsubsection{Logical Operator}
+
+This operators structure will return to boolean
+\begin{lstlisting}
+!  // not
+&&  // and
+||  // or
+\end{lstlisting}
+
+\begin{eg}
+Given integer variable i,j and k, what are the outputs when running the program fragment below?
+\begin{lstlisting}
+k = (i=2) \&\& (j=2) ;
+cout << i << j << endl; /* 2 2 */
+
+k = (i=0) \&\& (j=3) ;
+cout << i << j << endl; /* 0 2 */
+
+k = i ||  (j=4) ;
+cout << i << j << endl; /* 0 4 */
+
+k = (i=2) || (j=5) ;
+cout << i << j << endl; /* 2 4 */
+
+\end{lstlisting}
+Answers:
+
+\end{eg}
+
+
+
+\subsubsection{Conditional Operator}
+
+\subsubsection{Comma operator}
+
+
+
+
+
+
+\section{Method}
+
+
+\section{Flow control}
+\subsection{If else statement}
+if must in first part
+else if
+else must in last part
+
+\begin{lstlisting}
+if (logical_expression){
+
+    statement;
+    statement;
+    
+}
+else if (logical_expression){
+
+     statement;
+     statement;
+
+}
+
+else{
+
+   statement;
+   statement;
+   
+}
+\end{lstlisting}
+
+\subsection{Switch statement}
+What is Switch statement look like:
+\begin{lstlisting}
+switch (expression) {
+        case constant-expr1: statement1
+        case constant-expr2: statement2
+        ...
+        ...
+        case constant-exprN: statmentN
+        default: statement
+}
+
+\end{lstlisting}
+
+\begin{eg}
+Here is the example for using switch statement:
+\begin{lstlisting}
+while ((c = getchar()) != EOF) {  /* get a char */      switch (c) {        case ?0?: case ?1?: case ?2?: case ?3?: case ?4?:        case ?5?: case ?6?: case ?7?: case ?8?: case ?9?:         digit_count++;   /* no braces is needed */         break;        case ? ?: case ?\n?: case ?\t?:         white_character_count++;         break;        default:         other_character_count++;         break; 
+   }}
+\end{lstlisting}
+\end{eg}
+
+\section{Loop}
+
+\subsection{While Loop}
+
+\subsection{Do-while Loop}
+
+\subsection{For Loop}
+
+
+
+
+
+\section{Class}
+\subsection{Constructor}
+\subsection{this}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

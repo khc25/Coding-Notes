@@ -3,7 +3,7 @@
 \def\npart{II}
 \def\nterm {Lent}
 \def\nyear {2017-2018}
-\def\nlecturer {Brian}
+\def\nlecturer {Alex Lau}
 \def\ncourse {NodeJs}
 
 
@@ -15,7 +15,7 @@
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 
 \lstdefinelanguage{JavaScript}{
-  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, const},
   keywordstyle=\color{blue}\bfseries,
   ndkeywords={class, export, boolean, throw, implements, import, this},
   ndkeywordstyle=\color{darkgray}\bfseries,
@@ -36,17 +36,15 @@
    basicstyle=\footnotesize\ttfamily,
    showstringspaces=false,
    showspaces=false,
-   numbers=left,
-   numberstyle=\footnotesize,
-   numbersep=9pt,
    tabsize=2,
    breaklines=true,
    showtabs=false,
    captionpos=b
 }
 
-\begin{document}
+\setcounter{tocdepth}{2}
 
+\begin{document}
 \maketitle
 
 
@@ -56,9 +54,9 @@
 \section{Introduction to Node}
 \subsection{Modules}
 \textbf{Using Modules}\\
-Let's start by creating two files app.js, greet.js. Write the following:
+Let's start by creating two files \textcolor{red}{app.js, greet.js}. Write the following:
 
-
+\begin{lstlisting}
 // greet.js
 
 console.log('Hello there');
@@ -66,44 +64,1074 @@ console.log('Hello there');
 // app.js
 
 require('./greet');
+\end{lstlisting}
 
-in your terminal run |node app.js|
+in your terminal run  \textcolor{red}{node app.js}
+
 \subsection{Events}
+
 
 \subsection{Asynchronous code and callbacks}
 
 \subsection{fs}
 
+\subsection{Web Server}
+
 \section{Node packages}
 \subsection{npm}
+We already came across npm before, however we never really talked about how to use it. npm hosts the world wide largest collection of open source code. The code there is available in form of packages. A package is simply a collection of code that you can use. To maintain (install, update, delete) those packages we use a package manager, in our case npm. While you might say installing some code is easy, updating it is pretty hard, especially if the code depends on other packages, because then you need to keep track of all the packages to update. That is where npm comes in as a really useful helper.
+\\
+npm comes installed with node. You can find packages on the official npm \href{https://www.npmjs.com}{\textcolor{blue}{website}}.
 
-\subsection{Express and express Middleware and query strings}
+\subsubsection{npm init}
 
+
+\subsection{Express}
+Express is a npm package that allows us to set up servers on node in a more straightforward manner.\\
+
+Let's get started, create a new folder and \textcolor{red}{npm init} a new module in that folder. Add a 'app.js' file and let?s install express.
+\begin{lstlisting}
+npm install express --save
+\end{lstlisting}
+\begin{lstlisting}
+var express = require('express')
+var app = express();
+\end{lstlisting}
+Express the module returns a function constructor, so in order to make use of it we need to call express() and save that constructor in a variable, called \textcolor{red}{app} by convention.
+\\
+Let?s add a listen function to our app
+\begin{lstlisting}
+var express = require('express');
+var app = express();
+
+app.listen(8080);
+\end{lstlisting}
+That's it, we have a running server.\\
+Let's start listening for requests
+\begin{lstlisting}
+var express = require('express');
+var app = express();
+
+app.get('/', function(req, res) {
+    res.send('hello');
+});
+
+app.post('/login', function(req, res) {
+    console.log(req.path);
+    res.send('post received');
+});
+
+app.listen(8080);
+\end{lstlisting} 
+
+\subsubsection{Routing}
+When our app grows it will have many different routes, we don't want to manually define the route for every single page. Luckily Express makes that a painless process.
+\begin{lstlisting}
+app.get('/users/:id', function(req, res){
+    console.log('the user id is ' + req.params.id);
+});
+\end{lstlisting}
+Express tells us the parameters (in this case id) that the dynamic url contains. This we can dynamically load content without having to define every route manually.
+\subsubsection{Serving static files}
+Middleware is code that sits between two layers of software. So in the case of Express those two layers would be request and response. Express makes it very easy to plugin some middleware between the two and therefore make it extensible. That allows us to handle certain requests and automate things. We could even chain several pieces of middleware together.\\
+
+Imagine you have a website with many static files that you want to serve, like CSS files, HTML files or image files. We don?t want to make a route for every file, so instead we use middleware that handles those kind of requests. We usually put those kind of files in a folder called \textcolor{red}{public}.
+
+To serve them just use
+\begin{lstlisting}
+app.use(express.static('public'));
+\end{lstlisting}
+\subsubsection{Creating middleware}
+It is very straightforward to create your own middleware. Let's look at some code
+\begin{lstlisting}
+app.use('/', function(req, res, next){
+    console.log('Request Url: '+ req.url);
+    next();
+});
+
+app.get('/', function(req, res){
+    res.send('hello');
+});
+\end{lstlisting}
+As you see in the example above the middleware has a third parameter called  \textcolor{red}{next()}. It tells express to run the next middleware. In the example above express would run t\textcolor{red}{app.get()} next, as it is the next middleware. \textcolor{red}{app.get()} is a middleware because it sits between the request and response.
+\subsubsection{Form Submission}
+There are multiple ways to post data from client to server. The most fundamental way is form submission. You can look at the example below.
+
+
+\textbf{Submitting normal data}\\
+
+In \textcolor{red}{index.html}
+\begin{lstlisting}
+<html>
+    <head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+                    rel="stylesheet" 
+                    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+                    crossorigin="anonymous">
+    </head>
+    <body>
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label> Email:
+                    <input type='text' name="email" class="form-control" placeholder="Please input Email Here"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    Password:
+                    <input type='password' name="password" class="form-control"/>
+                </label>
+            </div>
+            <input type='submit' value="Submit" class="btn btn-primary"/>
+        </form>
+        <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+            crossorigin="anonymous"></script>
+    </body>
+</html>
+\end{lstlisting}
+Then in your \textcolor{red}{app.js}
+\begin{lstlisting}
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const path = require('path');
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+
+app.get('/',(req,res)=>{
+	res.sendFile(path.join(__dirname,'index.html'));
+});
+
+app.post('/login',(req,res)=>{
+	console.log(req.body);
+	res.send("Login infomation received.");
+});
+\end{lstlisting}
+
+\textbf{Uploading files}\\
+
+Let's add a extra file input \textcolor{red}{profile} to our login form.
+\begin{lstlisting}
+<html>
+    <head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+                    rel="stylesheet" 
+                    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+                    crossorigin="anonymous">
+    </head>
+    <body>
+        <form action="/login" method="POST" encType="multipart/form-data">
+            <div class="form-group">
+                <label> Email:
+                    <input type='text' name="email" class="form-control" placeholder="Please input Email Here"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    Password:
+                    <input type='password' name="password" class="form-control"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    Profile:
+                    <input type='file' name="profile" class="form-control"/>
+                </label>
+            </div>
+            <input type='submit' value="Submit" class="btn btn-primary"/>
+        </form>
+        <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+            crossorigin="anonymous"></script>
+    </body>
+</html>
+\end{lstlisting}
+Please note that the \textcolor{red}{input} has to be of the type \textcolor{red}{file}. On the server side, you have to install the package \textcolor{red}{express-fileupload} using npm.
+\begin{lstlisting}
+npm install --save express-fileupload
+\end{lstlisting}
+And the new \textcolor{red}{app.js} is as follow,
+\begin{lstlisting}
+const express = require('express');
+const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
+
+const path = require('path');
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(fileUpload());
+
+app.get('/',(req,res)=>{
+	res.sendFile(path.join(__dirname,'index.html'));
+});
+
+app.post('/login',(req,res)=>{
+	console.log(req.body);
+	console.log(req.files);
+	res.send("Login Information Received.");
+});
+
+app.listen(8080)
+\end{lstlisting}
+Please make sure you import the \textcolor{red}{express-fileupload} and setup-express to use it as a middleware by the following line.
+\begin{lstlisting}
+app.use(fileupload());
+\end{lstlisting}
+Then the file content is accessible through \textcolor{red}{req.file}. In this case, the file is accessible through \textcolor{red}{req.file.profile}
+
+\begin{eg}
+Serve the flowershop website via express.
+\end{eg}
+
+\subsection{Express middleware}
+So far we have learned how to set up our own API and receive all sorts of requests. However, there is one small problem. If we receive a POST request we cannot read the body of that request. If you \textcolor{red}{console.log(req.body)} you?ll see a \textcolor{red}{undefined}.\\
+
+The reason for that is that the creators of Express try to keep the code as lightweight as possible. That means that all code that is not required to run the most basic functions is excluded from the express package itself. Any additional code has to be added manually through separate npm modules.\\
+
+If you think about it, we don?t need the code to read the body of a POST request, if we only want to set up an API that handles GET requests. In the case we need it, we can always add it to Express later, which makes Express so powerful and at the same time lightweight.
+\subsubsection{Body parser}
+To be able to read the body of a POST request we need a module called body-parser.\\
+
+Let's npm install it
+
+\begin{lstlisting}
+npm install --save body-parser
+\end{lstlisting}
+
+To use it we make use of \textcolor{red}{app.use}
+
+\begin{lstlisting}
+var express = require('express')
+var bodyParser = require('body-parser')
+
+var app = express()
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+\end{lstlisting}
+The difference between \textcolor{red}{urlencoded} and \textcolor{red}{json} is the format in which we receive the body. Either you receive the post request encoded within the URL (more about that below) or it is passed along the request body in a \textcolor{red}{JSON} format. \textcolor{red}{body-parser} allows you to read both requests.\\
+
+So now we can read the request body.
+
+\begin{lstlisting}
+app.post('/test', (req, res) => {
+  console.log(req.body);
+  res.send('post successful');
+});
+\end{lstlisting}
+here are a lot of other useful npm modules which we can use as middleware. You can find a complete list \href{https://expressjs.com/en/resources/middleware.html}{\textcolor{blue}{here}}
+\subsubsection{Url query string}
+A URL consist of several parts:
+\begin{itemize}
+\item \textcolor{red}{http://} defines the protocol, you will usually come across this version or the secured \textcolor{red}{https}
+\item \textcolor{red}{www.website.com}  the domain of the website. The domain again consist of a few parts, the \textcolor{red}{www} is considered the subdomain. Whereas \textcolor{red}{website.com} is called the domain name. \textcolor{red}{.com} itself is called a domain. With domains we differentiate between Top Level Domains (.com, .net), 
+\item \textcolor{red}{/path/to/somewhere} after the domain we find the path, which leads to a specific file or API route
+\item \textcolor{red}{play?vidID=8372395} sometimes we also have parameters in the domain, they contain a \textcolor{red}{?}. These are used to pass along information, like the this example which video to play.
+\end{itemize}
+
+Let?s take a better look at the parameters which form something called a query strings. They always start with a ? which is used to differentiate them from the path, since the server needs to know where does the path end and the query string begin.\\
+
+We can stuff all sorts of information in these query strings, for example imagine we have a database of workers and want to retrieve all males above height 175cm. A query string could look like this
+\\
+
+\begin{eg}
+
+\end{eg}
+
+
+\begin{eg}
+Make an app that has a POST route. If we call the POST route with an array of numbers it should return the sum of all the numbers in the array. Test it out with Postman. Receive the array via the body.
+\end{eg}
+
+\begin{lstlisting}
+var arr = [1,2,3,4] // -> sending that to the API returns 10
+\end{lstlisting}
+
+\subsection{Request Response Cycle}
+Every http action consists of two parts, a \textbf{request} and a \textbf{response}. Every time somebody makes a request to our server we should respond with an appropriate answer. Imagine somebody greets you, it would be extremely rude if you wouldn?t greet back, you wouldn?t follow common social etiquette. The same can be said for servers, if you receive a request it is extremely rude to the users browser sending the request, if you don?t answer back.
+\\
+Therefore express is structured around the two fundamental components, request and response, or \textcolor{red}{req} and \textcolor{red}{res} as we call them in our code.
+
+\subsubsection{Request}
+
+\subsubsection{Response}
+
+\subsubsection{Visualisation}
 \subsection{Cookies and Session}
+You already learned Cookies Before With Express we have two options to deal with cookies. We can either store a large part with the user or keep most of the information on our servers. The difference is using cookies or cookie sessions. Lets look at each one separately.\\
 
+Note that \textcolor{red}{passport.js} also makes use of cookies and handles these for us if we use it. Using cookies usually isn?t required if we use passport. However passport isn?t always the solution, so we need to be able to set cookies ourselves.
+
+\subsubsection{cookie parser}
+If we want to make use of cookies we need a module called cookie-parser It allows us to read cookies on the request with \textcolor{red}{req.cookies} as well as set cookies using \textcolor{red}{res.cookie}
+
+\begin{lstlisting}
+var express = require('express');
+var cookieParser = require('cookie-parser');
+
+var app = express();
+app.use(cookieParser());
+
+app.get('/', (req, res) => {
+  console.log(req.cookies);
+
+  res.cookie('name', 'tobi', { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), httpOnly: true });
+})
+\end{lstlisting}
+In the above example we set the cookie for that person calling our root route. We give the cookie a property name and a value of tobi (should be unique name that allows identification). Then we set the cookie options, like the expiration date, when the cookie will expire.
+\\
+From now on we can uniquely identify this user, as long as the user doesn?t delete the cookie.
+\\
+There are a lot more properties for res.cookie check them out in the official \href{https://expressjs.com/en/4x/api.html#res.cookie}{\textcolor{blue}{documentation}}.
+
+\subsubsection{cookie session}
+The other way to identify a user is using session. Sessions are information stored about the user on the server side, usually in a redis db, but could also be a postgres.
+\\
+To use sessions we can use a package called cookie-session. Cookie Session stores an identifier (which we define) in a cookie on the client side. However since the user could manually manipulate the cookie to gain access to other peoples accounts, cookie session also stores a hash of that identifier with the identifier itself.
+\\
+The hash works just like the hashing of user passwords. The identifier is hashed with a secret key to result in an impossible to guess combination. With every request from the user cookie sessions will look at the identifier and hash it together with the secret. If the resulting hash matches the one stored in the cookie, we can be certain that the cookie hasn?t been tempered with.
+\begin{lstlisting}
+var express = require('express');
+var cookieSession = require('cookie-session');
+
+var app = express();
+app.use(cookieSession({
+  name: 'session',
+  secret: 'a hard to guess secret' ,
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
+
+app.get('/', (req, res) => {
+  console.log(req.session);
+
+  if(!req.session.id) {
+    req.session.id = 'unique identifier'
+  }
+
+  findUser(req.session.id) // return information about the user
+})
+\end{lstlisting}
+
+In the above example we add unique id to the user?s session if it doesn?t exist. We then call a function to retrieve information about the user based on the unique ID so we can respond dynamically with content based on the user.
+\\
+Please note we can store more information in the session that simply an ID, it?s pretty much up to us what we store there. However we should try to keep it to a minimum if possible, as to don?t make the user store too much information in his browser. On top of that is the maximum cookie size 4093 bytes.
 \section{Promises}
+\subsubsection{Promises}
+So far we have mainly relied on callbacks for our asynchronous code, which has long been the standard. However you will have noticed that error handling can quickly become very messy as we chain several callbacks together. Luckily with the new ES6 standard a new feature called Promise got introduced. \\
+
+You can imagine a Promise like the word suggest. You give it some JavaScript code and it promises to return you something. Either everything went well or an error occurred, either way you will get an answer from the Promise once it knows what happened.\\
+
+A Promise consist of three states:
+\begin{itemize}
+\item unresolved$\rightarrow$waiting for something to finish
+\item resolved$\rightarrow$something finished and all went well
+\item rejected$\rightarrow$something finished and an error occurred
+\end{itemize}
+
+By default a Promise is the unresolved state and waiting for something to occur. That something can be any kind of JavaScript function, for example a Get request.\\
+
+Let?s declare a promise to see what is happening
+
+\begin{lstlisting}
+var promise = new Promise((resolve, reject) => {
+    resolve();
+});
+console.log(promise);
+\end{lstlisting}
+Try running the above code in your browser console. Afterwards replace the \textcolor{red}{resolve()} with \textcolor{red}{reject()}. What do you see?
+
+You will notice that first of all you get back an object, which indicates whether the Promise was resolved or rejected. If you look at \textcolor{red}{promise\.\_\_proto\_\_} you will see the object has two methods, \textcolor{red}{catch} and \textcolor{red}{then}.
+
+You will further notice that you get an error message if you run the code with \textcolor{red}{reject()}. That error message basically tells you, you haven?t handled the error. So let?s solve that by make use of the two methods.
+\begin{lstlisting}
+var promise = new Promise((resolve, reject) => {
+    resolve();
+});
+
+promise.then(() => {
+    console.log('Promise resolved.');
+});
+
+promise.catch(() => {
+    console.log('An error occurred');
+});
+\end{lstlisting}
+Run the above code, then replace the \textcolor{red}{resolve()} with \textcolor{red}{reject()}. Notice how textcolor{red}{then()} only runs if the the promise was resolved and \textcolor{red}{catch()} only runs when it was rejected.
+
+The real power of promises comes to light when we start chaining different \textcolor{red}{.then()} together. Let?s refactor to the code to some ES6 standard and chain everything together.
+\begin{lstlisting}
+const promise = new Promise((resolve, reject) => {
+    resolve();
+});
+
+promise
+    .then(() => console.log('I ran'))
+    .then(() => console.log('I ran afterwards'))
+    .then(() => console.log('Then I ran'))
+    .catch((err) => console.log('uh oh error', err));
+\end{lstlisting}
+If you run the code above you will notice that you can do some pretty powerful chaining with promises, without having to worry about callbacks and error handling. You only need to handle the error once. To demonstrate that let?s change our code
+\begin{lstlisting}
+const promise = new Promise((resolve, reject) => {
+    resolve();
+});
+
+promise
+    .then(() => console.log('I ran'))
+    .then(() => { throw new Error('Help I am an error'); })
+    .then(() => console.log('I did not run'))
+    .catch((err) => console.log('uh oh error', err));
+\end{lstlisting}
+Run the code above to test it.
+
+Why did we change the arrow function to one with curly brackets? That is because without the curly brackets the arrow function will automatically return the inner content. However we don?t want to return anything, but instead throw an error. Therefore we need to wrap it in curly brackets to disable the return.
+
+(Notice if you run the above code and get an error variable already declared, refresh the page. That error occurs because of the const declaration, promise can only be declared once, replace it with var if you want or omit );
+\subsubsection{fetch}
+Promises are often used for AJAX requests, as these are processes that are asynchronous and a Promise makes life a lot easier handling their responses. Let?s demonstrate it using a new ES6 feature \textcolor{red}{fetch()} which makes simple AJAX requests and returns a Promise.
+\begin{lstlisting}
+const url = 'https://jsonplaceholder.typicode.com/posts';
+
+fetch(url)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err))
+\end{lstlisting}
+
+With fetch we have to make two requests, in the first one we receive an object, however without a body, so we have to fetch the body using response.json(). Chaining the requests together makes this all a breeze to write. 
+Try manipulating the domain to something like typicode123.com to see how the errors are handled.
+\\
+The implementation of fetch isn?t ideal, especially it?s error handling. While it is nice to have a native solution, other solutions like axios make a lot better use of Promises for API requests.
+
+\subsubsection{Axios}
+Axios is another package that makes a lot of uses of Promises. Here is an example of using \textcolor{red}{axios}.
+\begin{lstlisting}
+// GET method
+axios.get("/users")
+    .then(res=> console.log(res))
+    .catch(err=> console.log(err));
+
+// POST method
+axios.post("/users",{"id":2,"username":"newUserName"})
+    .then(res=> console.log(res) )
+    .catch(err=> console.log(err) );
+
+// DELETE method
+axios.delete("/users",{id:3})
+    .then(res=> console.log(res))
+    .catch(err=> console.log(err));
+
+// PUT method
+axios.put("/users",{"email":"user@user.com","password":"1234"})
+    .then(res=> console.log(res))
+    .catch(err=> console.log(res));
+\end{lstlisting}
+\subsubsection{Applying Promise to asynchronous code}
+A lot of code we use in node is asynchronous, Promises can help us clean that up.
+\begin{lstlisting}
+const fs = require('fs');
+
+function readdir(path) {
+    return new Promise((resolve, reject) => {
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(files);
+            }
+        });
+    });
+}
+
+module.exports = readdir();
+\end{lstlisting}
+Now if you require \textcolor{red}{readdir()} in another module you can chain  \textcolor{red}{.then()} and  \textcolor{red}{.catch} to it.
+\subsubsection{Promise.all}
+If you have several Promises you can rely on Promise.all to determine once they finished running. Promise.all itself is a promise that resolves when all promises resolved, if one fails it rejects. All you need to pass it is an array of promises.
+
+\begin{lstlisting}
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'one');
+});
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 2000, 'two');
+});
+
+Promise.all([p1, p2])
+    .then(values => console.log(values))
+    .catch(err => console.log(err));
+\end{lstlisting}
+\subsubsection{Async \& Await}
+ES7 supports new keyword called \textcolor{red}{async} and \textcolor{red}{await} to further simplify your promise method call.
+
+\begin{lstlisting}
+// Async Version 
+async function callAPIs(){
+    try{
+        let res1 = await axios.get("http://example.com")
+        let res2 = await axios.get(`http://example2.com?key1=${res1.key2}`)
+        return res2.key2;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+// Promise version
+function callAPIs(){
+    return new Promise((resolve,reject)=>{
+        axios.get("http://example.com")
+            .then((res1)=>axios.get(`http://example2.com?key1=${res1.key2}`))
+            .then((res2)=> resolve(res2.key2))
+            .catch((err)=>{
+                console.log(err);
+                reject(err);
+            });            
+    });
+}
+\end{lstlisting}
+As shown above, the async function is correspondent to a new Promise object.
+\begin{lstlisting}
+// Async Version
+async function callAPIs(){
+    return doSomething();
+}
+
+//Promise Version
+function callAPIs(){
+    return new Promise((resolve,reject)=>{
+        resolve(doSomething());
+    })
+}
+\end{lstlisting}
+Each catch block is correspondent to the catch method call in the promised version.
+
+\begin{lstlisting}
+// Async version
+async function callAPIs(){
+    try{
+        let res1 = await axios.get('http://example.com');
+        return res1;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+// Promised version
+function callAPIs(){
+    return new Promise((resolve,reject)=>{
+        axios.get("http://example.com")
+        .then((res1)=>resolve(res1))
+        .catch((err)=> reject(err))
+    });
+}
+\end{lstlisting}
+
+\begin{remark}
+\end{remark}
+\begin{itemize}
+\item Each \textcolor{red}{return} in the async version is correspondent to the \textcolor{red}{resolve} function call in the promised version.
+\item Each throw \textcolor{red}{err} in the async version is correspondent to the \textcolor{red}{reject} function call in the promised version.
+\end{itemize}
+
+\subsubsection{Async version $\iff$ Promise version Correspondence}
+Here is a quick comparison between the twos,
+\begin{itemize}
+\item \textcolor{red}{async} function $\iff$ new \textcolor{red}{Promise} Object
+\item \textcolor{red}{await} keyword $\iff$ \textcolor{red}{then()} method call
+\item \textcolor{red}{catch} block $\iff$ \textcolor{red}{resolve()} method call
+\item \textcolor{red}{return} keyword $\iff$ \textcolor{red}{resolve()} function call
+\item \textcolor{red}{throw} error $\iff$ \textcolor{red}{reject()} function call
+\end{itemize}
+
+\subsubsection{Promise.all for Async}
+You can also use Promise.all in async function when you want to wait for multiple promises before proceeding.
+\begin{lstlisting}
+async function callAPIs(){
+    let combinedPromise = Promise.all([axios.get('http://example1.com'),
+                                        axios.get('http://example2.com')]);
+    let responses = await combinedPromise;
+    return responses;
+}
+\end{lstlisting}
+\begin{eg}
+Create a module that contains a promised version of fs.readdir and fs.stat. Similar to the example above.\\
+\begin{itemize}
+\item Then download this \href{https://drive.google.com/file/d/0BwsQDCAXyIETQnR6akExb1AtX3c/view}{\textcolor{blue}{file structure}}
+\item Use the modules to determine whether each path leads to a directory or file. Read the documentation for fs properly you?ll find all the necessary knowledge in there.
+\item Output should look like this
+\end{itemize}
+\begin{lstlisting}
+/files/project_A/ is a directory
+/files/project_A/README.md is a file
+/files/project_A/images/ is a directory
+...
+\end{lstlisting}
+\end{eg}
+
+
+\section{Assignment 1}
+
 
 \section{Data Structure}
+\subsection{List, Map and Set}
+\subsection{Stack and Queue}
+
+\section{HTTP Header}
 
 \section{Jasmine}
+\subsection{Expectation and Matcher}
+\subsection{Setup and Teardown}
+\subsection{Jasmine Spies}
+\subsection{Async and Clock}
+\subsection{Supertest}
 
 \section{API and Handlebars}
+\subsection{Restful APIs}
+\subsection{API Methods}
+\subsubsection{API Structure}
+\subsubsection{HTTP Methods}
+Now it?s time to introduce the verbs to the equation. The verbs are going to be the four main http methods.
+\begin{itemize}
+\item \textcolor{red}{GET} Ask the server to retrieve some resources
+\item \textcolor{red}{POST} Ask the server to create a new resource
+\item \textcolor{red}{PUT}  Ask the server to edit/update an existing resource
+\item \textcolor{red}{DELETE} Ask the server to remove an existing resource
+\end{itemize}
+
+With these four verbs we can basically do anything with our API. In case of our pizza parlor it would work as follows:\\
+\textbf{Request endpoint action}\\
+\begin{tabular}{ccc}
+GET & /orders & List all the orders\\
+POST &/orders  & Add new order\\
+GET & /orders/1& List order with ID 1\\
+GET & /orders/2& List order with ID 2\\
+PUT & /orders/1& Update order with ID 1\\
+DELETE & /orders/1& Delete order with ID 1\\
+\end{tabular}
+\subsubsection{Express example}
+The Restful API can thus be translated to the Express application as follow,
+\begin{lstlisting}
+const express = require('express');
+const app = express();
+
+// Remember to put necessary plugin here.
+
+app.get('/orders/:id',(req,res)=>{
+    const id = req.params.id;
+    const order = // Logic that read order by id.
+    res.json(order);
+});
+
+app.get('/orders',(req,res)=>{
+    const orders = // Logic that reads orders from somewhere.
+    res.json(orders);
+});
+
+
+app.post('/orders',(req,res)=>{
+    const newOrder = req.body.order; // Remember to use body-parser.
+    // Logic that create a order
+    res.json({success:true});
+});
+
+app.put('/orders/:id',(req,res)=>{
+    const id = req.params.id;
+    //Logic that updates the order
+    res.json({success:true})
+});
+
+
+app.delete('/orders/:id',(req,res)=>{
+    const orderIdToBeDeleted = req.params.id;
+    // Logic that deletes the order
+    res.json({success:true})
+});
+\end{lstlisting}
+
+\subsubsection{API Response}
+Every request to our API needs an adequate response. Whereas it is very obvious how to respond to a GET request, what is an adequate response to a POST request?
+\\
+First of all the software posting wants to know that the POST request was successful, so we need to respond with an adequate header of 200 if the request was properly handled. Further by convention we would respond with some sort of unique identifier of that post request. In the above example of the pizza order, we would respond with the order ID.
+\\
+For a PUT or DELETE request, a response with a header 200 would be adequate.
+
+\subsubsection{Scaling the API}
+Imagine now our Pizza Parlor is booming and the chief Pizza baker decides to reward good customers for their loyalty. For that we need to keep track of customers and give each customer a unique identifier.\\
+
+How would we go about that? There are some possible ways. The most obvious one would be to create another resource called /customers. So that we could make GET requests to /customers/customer\_id and so on.\\
+
+However, how do we link a customer to his order? Opinions are split here in the developer community amongst two main solutions and you?ll encounter both. Either we extend our customer endpoint customers/5/orders to get the orders of customer 5 and customer/5/orders/3 to get customer 5?s third order. Or we keep everything as flat as possible and when making a request to orders pass along the customer ID. Both ways are perfectly legit according to REST principles and it is up to you how you?d like to structure your API.\\
+
+So a request to order a POST pizza would look like\\
+
+POST /customers/5/orders\\
+
+\begin{lstlisting}
+{
+    "type": "napoletana",
+    "toppings": "extra cheese"
+}
+\end{lstlisting}
+
+POST/orders
+
+\begin{lstlisting}
+{
+    "type": "napoletana",
+    "toppings": "extra cheese",
+    "customer_id": "5"
+}
+\end{lstlisting}
+
+\subsubsection{REST vs RPC vs GraphQL}
+There are multiple styles of API structures out there. You probably read about it somewhere in internet.
+\begin{itemize}
+\item \textbf{REST} is the one we have been discussing in this article.
+\item \textbf{RPC} is the short form of Remote Procedural Call which differs with REST in the format and the semantics of the url.
+\item \textbf{GraphQL} is the newcomer which use a single endpoint with a newly introduced query language GraphQL
+\end{itemize}
+
+\textbf{Rest vs RPC}\\
+Here are two contrasting examples of Rest-style API \& RPC-style API
+\begin{lstlisting}
+//REST
+GET  /friends
+POST /friends
+PUT  /friends
+DELETE /friends
+
+//RPC
+GET /friends
+POST /addFriends
+POST /updateFriends
+POST /deleteFriends
+\end{lstlisting}
+
+In REST, the action is represented by the HTTP method while in RPC, the action is represented by the url route. Because the HTTP verb is well-defined, the developers can understand your API easier.
+
+\textbf{Rest vs GraphQL}\\
+GraphQL is the new contender of REST. It features a flexible query language and type system to make writing complex API call easier and more efficient. You can read more about it \href{http://graphql.org}{\textcolor{blue}{here}}
+
+\subsection{HTML Template}
+\subsection{Handlebars}
+\subsubsection{Server side vs Client side rendering}
+\textcolor{red}{Rendering} is the process of picking a template and populating it with the data we needed to create the \textcolor{red}{HTML} file. Here are the main difference between server-side rendering and client-side rendering:\\
+\begin{itemize}
+\item \textcolor{red}{Server Side Rendering:}\\
+         \begin{itemize}
+         \item The rendering process is happened on the server side making use of the templates and data.
+         \item It facilitates \textcolor{red}{form submission} and \textcolor{red}{page refresh}
+         \item Examples: \textcolor{red}{Handlebars}
+         \end{itemize}
+\item \textcolor{red}{Client Side Rendering:} \\
+         \begin{itemize}
+         \item The rendering process is happened on the client side using javascript and HTML templates.
+         \item  It facilitates \textcolor{red}{AJAX Call} and \textcolor{red}{DOM manipulations}
+         \item Example: \textcolor{red}{JQuery with HTML Template, React} and \textcolor{red}{Anugular}
+         \end{itemize}
+\end{itemize}
+We are going to employ a MIXED approach for this problem:
+\begin{itemize}
+\item We are going to use \textcolor{red}{Server side rendering} to render the layout of your pages.
+\item We are going to use \textcolor{red}{AJAX} and \textcolor{red}{Client side rendering} to populate your page with the necessary data.
+\end{itemize}
+\subsubsection{Handlebars}
+Handlebars is an extremely lightweight template engine. Handlebars is used by some of the biggest websites on the Internet. It is extremely simple to use, we run with res.render and it returns us HTML pages ready to send to the users. 
+Express is build with support for template engines, making it extremely straightforward to plug in Handlebars.\\
+
+Create a new npm project with npm init. Further install npm install express. To install handlebars we can use the express-handlebars module.\\
+\begin{lstlisting}
+npm install express-handlebars
+\end{lstlisting}
+\subsubsection{Basic folder structure}
+To use Handlebars we need to save our files in certain structure. Create a views folder and two subfolders layouts and partials.
+\begin{lstlisting}
+app.js // main file
+views
+    -layouts
+    -partials
+\end{lstlisting}
+\subsubsection{Main Handlebars}
+The main page structure is saved in a file called \textcolor{red}{main.handlebars}. It contains the HTML code that that sets the page structure. Its actual content can be dynamically replaced, and will be rendered where the  \textcolor{red}{\{\{\{body\}\}\}} element is. Add it to the \textcolor{red}{layouts} folder
+\begin{lstlisting}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>...</title>
+    </head>
+    <body>
+        
+            {{{body}}}
+        
+    </body>
+</html>
+\end{lstlisting}
+Let's add a simple app.js file
+\begin{lstlisting}
+const express = require('express');
+const app = express();
+const hb = require('express-handlebars');
+
+app.engine('handlebars', hb({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+app.get('/people', function(req, res){
+    res.render('person');
+});
+
+
+app.listen(8080);
+\end{lstlisting}
+Notice in the file above how we set handlebars as the \textcolor{red}{app.engine} which is used to register a template engine with express. We set the default layout to main, which is the \textcolor{red}{main.handlebars} file we created earlier. Afterwards we set the \textcolor{red}{view engine} to handlebars.\\
+
+In the get request below we don?t use \textcolor{red}{res.send} but instead use \textcolor{red}{res.render([view])}. The view defines which file from the view folder to render. So in this case , you need a file called \textcolor{red}{person.handlebars} withing the folder \textcolor{red}{views}.\\
+
+Let?s take a look at layouts, partials and helpers.
+\subsubsection{Layouts}
+If you remember the ?views? folder we created had the following structure:
+\begin{lstlisting}
+views
+    - layouts
+        - main.handlebars
+    - partials
+\end{lstlisting}
+We put the \textcolor{red}{main.handlebars} file in the ?layouts? folder. You might have wondered why there is a special folder just for \textcolor{red}{main.handlebars}. The reason is that we can have several templates in there. Depending on the page section we might want to have a different structure, so we can put that there.
+
+Let?s add a second layout, we will call it \textcolor{red}{otherPage.handlebars}:
+\begin{lstlisting}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>...</title>
+    </head>
+    <body>
+        <h1>I am a different template </h1>
+        
+            {{{body}}}
+        
+    </body>
+</html>
+\end{lstlisting}
+When we call res.render() we can manually update the default layout in the object we are passing to the function. Look at the object below, we give it a property called layout where we define the new layout page to use for that route.
+\begin{lstlisting}
+app.get('/something', (req, res) => {
+    res.render('view', {layout:"otherPage"})
+})
+\end{lstlisting}
+\subsubsection{Partials}
+The other folder you probably noticed is the partials folder. Partials are elements that keep on reappearing throughout the app. For example a header or a footer. Since we can have several layouts but might want to share a header across layouts it makes no sense to hardcode the header into a layout.
+
+We instead want to have a dynamic and sharable header as well. Let?s add one.
+
+In the partials folder add a file called \textcolor{red}{header.handlebars}:
+\begin{lstlisting}
+<h1>I am a header </h1>
+\end{lstlisting}
+In our \textcolor{red}{otherPage.handlebars} file we add the header with \textcolor{red}{\{\{> header \}\}} :
+\begin{lstlisting}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>...</title>
+    </head>
+    <body>
+        
+        {{> header }}
+        
+
+        <h1>I am a different template </h1>
+
+        
+        {{{body}}}
+        
+    </body>
+</html>
+\end{lstlisting}
+Render it and you should see the header appear.
+\subsection{Basic Authentication}
+The simplest way to authenticate is using password and username, something we call Basic Authentication (Basic Auth). It is pretty simple and pretty old school. However while ?old school = gold school? holds true for Hip Hop, it doesn?t necessarily hold true for technology. Let?s try to understand why.\\
+
+We simply pass username and password in the header, in a part called Authorization. So every call we make to an API includes a header with the password and username. Anybody with those two can access the API. However what usually happens is that many people work on an application, including outsiders. Using basic auth gives everybody access to the user credentials and anybody with malicious intends can misuse them and create a mess with your account. You can compare it to giving out the master key to all hotel rooms instead of giving guests only a key to their room. That?s why companies came up with a different solution.\\
+\subsubsection{Adding Basic Auth to Express}
+You can easily add basic authentication to express using the package  \textcolor{red}{express-basic-auth}. The following code adds a Basic Authentication for your express application.
+\begin{lstlisting}
+var app = require('express')()
+var basicAuth = require('express-basic-auth')
+ 
+app.use(basicAuth({
+    users: { 'admin': 'supersecret' },
+    challenge: true,
+    realm: 'My Application'
+}))
+\end{lstlisting}
+The username is this admin and the password is supersecret. The only problem of this authentication is that you cannot keep the login status if you close your browser. And you cannot logout without closing your browser.
+\subsubsection{Authenticating different users}
+You can also use the \textcolor{red}{authorizer} in this package to authenticate different users.
+\begin{lstlisting}
+app.use(basicAuth({
+    authorizer: myAuthorizer,
+    challenge: true,
+    realm: 'My Application'
+}));
+
+const USERS = [
+    {
+        "username":"gordon",
+        "password":"abc"
+    }
+]
+
+function myAuthorizer(username, password) {
+    return USERS.some((user)=>{
+        return user.username == username && user.password == password
+    })
+}
+\end{lstlisting}
+Because by default the express-basic-auth does not challenge the user. We have to add the attribute for \textcolor{red}{challenge} to be true. \textcolor{red}{realm} defines the area of effectiveness for this authentication which Express and the browser handle it for us automatically.
+\subsection{Postman}
+\subsubsection{What is Postman?}
+Postman is a popular tool for testing HTTP request/response, espeically RESTful APIs. 
+\subsubsection{Where can I get Postman}
+\href{https://www.getpostman.com/postman}{\textcolor{blue}{Download it here}}
+\section{Algorithm}
+\subsection{Sorting}
+\subsection{Searching}
+
+\section{Dependency Injection}
+
+\section{Assignment 2}
 
 \section{SQL}
+\subsection{Introduction}
+A relational database (RDB) is a collective set of multiple data sets organized by tables, records and columns. RDBs establish a well-defined relationship between database tables. Tables communicate and share information, which facilitates data searchability, organization and reporting. You can imagine them being very similar to an excel spreadsheet, with rows and columns. Whereas a database is more like an excel workbook, which consists out of several spreadsheets.\\
+
+RDBs use Structured Query Language (SQL) which allows us to program on these databases and query them for data. While there are many SQL databases out there we will be using PostgreSQL.\\
+\subsubsection{Setting up}
+
+\textbf{Mac}\\
+If you have a Mac the easiest way to install PostgreSQL is via the \href{http://postgresapp.com}{\textcolor{blue}{ PostgresApp}}.
+\textbf{Ubuntu/Windows}\\
+If you are using linux (ubuntu) you can run the following code
+\begin{lstlisting}
+ sudo apt-get install postgresql postgresql-contrib
+\end{lstlisting}
+You can also consider downloading a graphical interface software like \href{https://www.pgadmin.org}{\textcolor{blue}{ pgAdmin}}.
+ (linux, windows, mac) . We won?t use it for now, but they can help you with debugging at a later stage.
+
+You should start your database server by running the command below.
+
+\begin{lstlisting}
+ sudo service postgresql start
+\end{lstlisting}
+\subsubsection{Creating a database}
+
+\subsubsection{Setting up user}
+
+\begin{eg}
+
+\end{eg}
+
+\subsection{Adding, updating and deleting data}
+
+\subsection{Querying data}
+
+\begin{eg}
+
+\end{eg}
+
+\subsection{Node \& PostgreSQL}
+\subsubsection{PostgreSQL}
+\begin{eg}
+
+\end{eg}
+\subsubsection{SQL injection}
+\subsection{SQL joins}
+When there are more than one table in a database, we have to establish relation between them. We are using primary and foreign key to establish relation among different tables.
+\subsubsection{Primary Key and Foreign Key}
+Primary key is a unique identifier for each row of data. You have already encounter it in the previous section. It is the \textcolor{red}{id SERIAL NOT NULL}
+
+Foreign key simply means the primary keys of the other table. They are fundamental to linking two SQL tables together. To join two tables together using foreign key, we normally use the SQL Join. We have other ways like sub-queries to achieve the same thing. But SQL Join is the preferable way of doing this.
+\subsubsection{Join}
+\subsubsection{Different type of JOINs}
+\begin{eg}
+
+\end{eg}
+\subsection{Transaction}
+\subsubsection{Database Transactior}
+
 
 \section{Knex}
+\subsection{Knex.JS}
+
+\subsection{Knex migrations CLI}
 
 \section{Database Theory}
+\subsection{Associations}
+Database design should be the first step in your database-driven application development. It is often said that we should always design our code around the data because once the database design is designed well, normally the code to manipulate the data will be trivial.
+\subsubsection{Different Types of Associations}
+There are mainly three types of association. To illustrate the differences , we can look at the tables of a hypothetical school.\\
+\begin{itemize}
+\item One-to-One : 
+\item Many-to One and One-to-Many : 
+\item Many-to-Many : 
+\end{itemize}
+
+\textbf{One-to-One}\\
+
+\textbf{Many-to-One and One-to-Many}\\
+
+\textbf{Many-to-Many}\\
+
+
+\subsection{Database Design}
 
 \section{Operating System}
 
+\section{Assignment 3}
+
 \section{Redis}
+\subsection{Introduction}
+\subsection{Redis and node}
 
 \section{Websockets}
+\subsection{Socket.io}
 
 \section{User Authentication}
+\subsection{Passport.js}
+\subsection{Bcrypt}
+\subsection{Social Login}
+\subsection{Redis Session}
 
 \section{System Admin}
+\subsection{Digital Ocean}
+\subsection{apt-get}
+\subsection{Bash}
+\subsection{NodeJs Setup}
+\subsection{Process Manager and Nginx}
+\subsection{Git Deployment}
 
+\section{Assignment 4}
 
 \end{document}
