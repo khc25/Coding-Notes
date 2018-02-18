@@ -11,59 +11,70 @@
 \BOOKMARK [2][-]{subsection.2.4}{Request Response Cycle}{section.2}% 11
 \BOOKMARK [2][-]{subsection.2.5}{Cookies and Session}{section.2}% 12
 \BOOKMARK [1][-]{section.3}{Promises}{}% 13
-\BOOKMARK [1][-]{section.4}{Assignment 1}{}% 14
-\BOOKMARK [1][-]{section.5}{Data Structure}{}% 15
-\BOOKMARK [2][-]{subsection.5.1}{List, Map and Set}{section.5}% 16
-\BOOKMARK [2][-]{subsection.5.2}{Stack and Queue}{section.5}% 17
-\BOOKMARK [1][-]{section.6}{HTTP Header}{}% 18
-\BOOKMARK [1][-]{section.7}{Jasmine}{}% 19
-\BOOKMARK [2][-]{subsection.7.1}{Expectation and Matcher}{section.7}% 20
-\BOOKMARK [2][-]{subsection.7.2}{Setup and Teardown}{section.7}% 21
-\BOOKMARK [2][-]{subsection.7.3}{Jasmine Spies}{section.7}% 22
-\BOOKMARK [2][-]{subsection.7.4}{Async and Clock}{section.7}% 23
-\BOOKMARK [2][-]{subsection.7.5}{Supertest}{section.7}% 24
-\BOOKMARK [1][-]{section.8}{API and Handlebars}{}% 25
-\BOOKMARK [2][-]{subsection.8.1}{Restful APIs}{section.8}% 26
-\BOOKMARK [2][-]{subsection.8.2}{API Methods}{section.8}% 27
-\BOOKMARK [2][-]{subsection.8.3}{HTML Template}{section.8}% 28
-\BOOKMARK [2][-]{subsection.8.4}{Handlebars}{section.8}% 29
-\BOOKMARK [2][-]{subsection.8.5}{Basic Authentication}{section.8}% 30
-\BOOKMARK [2][-]{subsection.8.6}{Postman}{section.8}% 31
-\BOOKMARK [1][-]{section.9}{Algorithm}{}% 32
-\BOOKMARK [2][-]{subsection.9.1}{Sorting}{section.9}% 33
-\BOOKMARK [2][-]{subsection.9.2}{Searching}{section.9}% 34
-\BOOKMARK [1][-]{section.10}{Dependency Injection}{}% 35
-\BOOKMARK [1][-]{section.11}{Assignment 2}{}% 36
-\BOOKMARK [1][-]{section.12}{SQL}{}% 37
-\BOOKMARK [2][-]{subsection.12.1}{Introduction}{section.12}% 38
-\BOOKMARK [2][-]{subsection.12.2}{Adding, updating and deleting data}{section.12}% 39
-\BOOKMARK [2][-]{subsection.12.3}{Querying data}{section.12}% 40
-\BOOKMARK [2][-]{subsection.12.4}{Node \046 PostgreSQL}{section.12}% 41
-\BOOKMARK [2][-]{subsection.12.5}{SQL joins}{section.12}% 42
-\BOOKMARK [2][-]{subsection.12.6}{Transaction}{section.12}% 43
-\BOOKMARK [1][-]{section.13}{Knex}{}% 44
-\BOOKMARK [2][-]{subsection.13.1}{Knex.JS}{section.13}% 45
-\BOOKMARK [2][-]{subsection.13.2}{Knex migrations CLI}{section.13}% 46
-\BOOKMARK [1][-]{section.14}{Database Theory}{}% 47
-\BOOKMARK [2][-]{subsection.14.1}{Associations}{section.14}% 48
-\BOOKMARK [2][-]{subsection.14.2}{Database Design}{section.14}% 49
-\BOOKMARK [1][-]{section.15}{Operating System}{}% 50
-\BOOKMARK [1][-]{section.16}{Assignment 3}{}% 51
-\BOOKMARK [1][-]{section.17}{Redis}{}% 52
-\BOOKMARK [2][-]{subsection.17.1}{Introduction}{section.17}% 53
-\BOOKMARK [2][-]{subsection.17.2}{Redis and node}{section.17}% 54
-\BOOKMARK [1][-]{section.18}{Websockets}{}% 55
-\BOOKMARK [2][-]{subsection.18.1}{Socket.io}{section.18}% 56
-\BOOKMARK [1][-]{section.19}{User Authentication}{}% 57
-\BOOKMARK [2][-]{subsection.19.1}{Passport.js}{section.19}% 58
-\BOOKMARK [2][-]{subsection.19.2}{Bcrypt}{section.19}% 59
-\BOOKMARK [2][-]{subsection.19.3}{Social Login}{section.19}% 60
-\BOOKMARK [2][-]{subsection.19.4}{Redis Session}{section.19}% 61
-\BOOKMARK [1][-]{section.20}{System Admin}{}% 62
-\BOOKMARK [2][-]{subsection.20.1}{Digital Ocean}{section.20}% 63
-\BOOKMARK [2][-]{subsection.20.2}{apt-get}{section.20}% 64
-\BOOKMARK [2][-]{subsection.20.3}{Bash}{section.20}% 65
-\BOOKMARK [2][-]{subsection.20.4}{NodeJs Setup}{section.20}% 66
-\BOOKMARK [2][-]{subsection.20.5}{Process Manager and Nginx}{section.20}% 67
-\BOOKMARK [2][-]{subsection.20.6}{Git Deployment}{section.20}% 68
-\BOOKMARK [1][-]{section.21}{Assignment 4}{}% 69
+\BOOKMARK [1][-]{section.4}{Assignment 1 - dropbox with cache}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Introduction}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Questions and solutions}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Data Structure}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{List, Map and Set}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{Stack and Queue}{section.5}% 19
+\BOOKMARK [1][-]{section.6}{HTTP Header}{}% 20
+\BOOKMARK [1][-]{section.7}{Jasmine}{}% 21
+\BOOKMARK [2][-]{subsection.7.1}{Introduction}{section.7}% 22
+\BOOKMARK [2][-]{subsection.7.2}{Expectation and Matcher}{section.7}% 23
+\BOOKMARK [2][-]{subsection.7.3}{Setup and Teardown}{section.7}% 24
+\BOOKMARK [2][-]{subsection.7.4}{Jasmine Spies}{section.7}% 25
+\BOOKMARK [2][-]{subsection.7.5}{Async and Clock}{section.7}% 26
+\BOOKMARK [2][-]{subsection.7.6}{Supertest}{section.7}% 27
+\BOOKMARK [1][-]{section.8}{API and Handlebars}{}% 28
+\BOOKMARK [2][-]{subsection.8.1}{Introduction}{section.8}% 29
+\BOOKMARK [2][-]{subsection.8.2}{Restful APIs}{section.8}% 30
+\BOOKMARK [2][-]{subsection.8.3}{API Methods}{section.8}% 31
+\BOOKMARK [2][-]{subsection.8.4}{HTML Template}{section.8}% 32
+\BOOKMARK [2][-]{subsection.8.5}{Handlebars}{section.8}% 33
+\BOOKMARK [2][-]{subsection.8.6}{Basic Authentication}{section.8}% 34
+\BOOKMARK [2][-]{subsection.8.7}{Postman}{section.8}% 35
+\BOOKMARK [1][-]{section.9}{Algorithm}{}% 36
+\BOOKMARK [2][-]{subsection.9.1}{Sorting}{section.9}% 37
+\BOOKMARK [2][-]{subsection.9.2}{Searching}{section.9}% 38
+\BOOKMARK [1][-]{section.10}{Dependency Injection}{}% 39
+\BOOKMARK [1][-]{section.11}{Assignment 2 - notes taking file}{}% 40
+\BOOKMARK [1][-]{section.12}{SQL}{}% 41
+\BOOKMARK [2][-]{subsection.12.1}{Introduction}{section.12}% 42
+\BOOKMARK [2][-]{subsection.12.2}{Adding, updating and deleting data}{section.12}% 43
+\BOOKMARK [2][-]{subsection.12.3}{Querying data}{section.12}% 44
+\BOOKMARK [2][-]{subsection.12.4}{Node \046 PostgreSQL}{section.12}% 45
+\BOOKMARK [2][-]{subsection.12.5}{SQL joins}{section.12}% 46
+\BOOKMARK [2][-]{subsection.12.6}{Transaction}{section.12}% 47
+\BOOKMARK [1][-]{section.13}{Knex}{}% 48
+\BOOKMARK [2][-]{subsection.13.1}{Knex.JS}{section.13}% 49
+\BOOKMARK [2][-]{subsection.13.2}{Knex migrations CLI}{section.13}% 50
+\BOOKMARK [1][-]{section.14}{Database Theory}{}% 51
+\BOOKMARK [2][-]{subsection.14.1}{Introduction}{section.14}% 52
+\BOOKMARK [2][-]{subsection.14.2}{Associations}{section.14}% 53
+\BOOKMARK [2][-]{subsection.14.3}{Database Design}{section.14}% 54
+\BOOKMARK [1][-]{section.15}{Operating System}{}% 55
+\BOOKMARK [1][-]{section.16}{Assignment 3 - notes taking knex}{}% 56
+\BOOKMARK [1][-]{section.17}{Redis}{}% 57
+\BOOKMARK [2][-]{subsection.17.1}{Introduction}{section.17}% 58
+\BOOKMARK [2][-]{subsection.17.2}{Redis and node}{section.17}% 59
+\BOOKMARK [1][-]{section.18}{Websockets}{}% 60
+\BOOKMARK [2][-]{subsection.18.1}{Socket.io}{section.18}% 61
+\BOOKMARK [1][-]{section.19}{User Authentication}{}% 62
+\BOOKMARK [2][-]{subsection.19.1}{Introduction}{section.19}% 63
+\BOOKMARK [2][-]{subsection.19.2}{Passport.js}{section.19}% 64
+\BOOKMARK [2][-]{subsection.19.3}{Bcrypt}{section.19}% 65
+\BOOKMARK [2][-]{subsection.19.4}{Social Login}{section.19}% 66
+\BOOKMARK [2][-]{subsection.19.5}{Redis Session}{section.19}% 67
+\BOOKMARK [1][-]{section.20}{System Admin}{}% 68
+\BOOKMARK [2][-]{subsection.20.1}{Introduction}{section.20}% 69
+\BOOKMARK [2][-]{subsection.20.2}{Digital Ocean}{section.20}% 70
+\BOOKMARK [2][-]{subsection.20.3}{apt-get}{section.20}% 71
+\BOOKMARK [2][-]{subsection.20.4}{Bash}{section.20}% 72
+\BOOKMARK [2][-]{subsection.20.5}{NodeJs Setup}{section.20}% 73
+\BOOKMARK [2][-]{subsection.20.6}{Process Manager and Nginx}{section.20}% 74
+\BOOKMARK [2][-]{subsection.20.7}{Git Deployment}{section.20}% 75
+\BOOKMARK [1][-]{section.21}{Assignment 4 - chatroom single file}{}% 76
+\BOOKMARK [1][-]{section.22}{Hamming}{}% 77
+\BOOKMARK [2][-]{subsection.22.1}{Introduction}{section.22}% 78
+\BOOKMARK [1][-]{section.23}{Software Licensing}{}% 79
+\BOOKMARK [2][-]{subsection.23.1}{Introduction}{section.23}% 80

@@ -688,7 +688,9 @@ Create a module that contains a promised version of fs.readdir and fs.stat. Simi
 \end{eg}
 
 
-\section{Assignment 1}
+\section{Assignment 1 - dropbox with cache}
+\subsection{Introduction}
+\subsection{Questions and solutions}
 
 
 \section{Data Structure}
@@ -698,6 +700,8 @@ Create a module that contains a promised version of fs.readdir and fs.stat. Simi
 \section{HTTP Header}
 
 \section{Jasmine}
+\subsection{Introduction}
+Basics \& Adv.
 \subsection{Expectation and Matcher}
 \subsection{Setup and Teardown}
 \subsection{Jasmine Spies}
@@ -705,6 +709,7 @@ Create a module that contains a promised version of fs.readdir and fs.stat. Simi
 \subsection{Supertest}
 
 \section{API and Handlebars}
+\subsection{Introduction}
 \subsection{Restful APIs}
 \subsection{API Methods}
 \subsubsection{API Structure}
@@ -1021,7 +1026,7 @@ Postman is a popular tool for testing HTTP request/response, espeically RESTful 
 
 \section{Dependency Injection}
 
-\section{Assignment 2}
+\section{Assignment 2 - notes taking file}
 
 \section{SQL}
 \subsection{Introduction}
@@ -1046,6 +1051,24 @@ You should start your database server by running the command below.
  sudo service postgresql start
 \end{lstlisting}
 \subsubsection{Creating a database}
+By default \textcolor{red}{postgresql} creates a user called \textcolor{red}{postgres}. The \textcolor{red}{postgres} user has all of the permission on working on the DB. Therefore in order to perform the operation below, you can run the command below.
+\begin{lstlisting}
+sudo su postgres
+\end{lstlisting}
+You are now logged in to the user \textcolor{red}{postgres} in \textcolor{red}{ubuntu}. Because of the mechanism of peer authentication. You won?t need a password to access the DB using the user \textcolor{red}{postgres} if you are at the same machine as the postgresql server.\\
+
+Using the \textcolor{red}{createdb} command creates a new database. Please note that the following commands are run in \textbf{BASH}.
+\begin{lstlisting}
+createdb fruits
+\end{lstlisting}
+Now you can work the database using PostgreSQL. You will notice that your console changes and you are in the database.
+\begin{lstlisting}
+psql fruits
+\end{lstlisting}
+The above command is only a shortform. Here is the full version of a generic command for logging to postgresql server.
+\begin{lstlisting}
+The above command is only a shortform. Here is the full version of a generic command for logging to postgresql server.
+\end{lstlisting}
 
 \subsubsection{Setting up user}
 
@@ -1088,6 +1111,7 @@ Foreign key simply means the primary keys of the other table. They are fundament
 \subsection{Knex migrations CLI}
 
 \section{Database Theory}
+\subsection{Introduction}
 \subsection{Associations}
 Database design should be the first step in your database-driven application development. It is often said that we should always design our code around the data because once the database design is designed well, normally the code to manipulate the data will be trivial.
 \subsubsection{Different Types of Associations}
@@ -1109,22 +1133,190 @@ There are mainly three types of association. To illustrate the differences , we 
 
 \section{Operating System}
 
-\section{Assignment 3}
+\section{Assignment 3 - notes taking knex}
 
 \section{Redis}
 \subsection{Introduction}
 \subsection{Redis and node}
 
 \section{Websockets}
+\subsection{Introduction}
 \subsection{Socket.io}
+\begin{lstlisting}
+//server.js
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+io.on('connection', (socket) => {
+    console.log('a user connected to the socket');
+});
+
+http.listen(3030);
+\end{lstlisting}
+As you can see above we set up a very simple server using express. The server only serves one file, the index.html file. interestingly we listen using the http module internal to node. That is because socket.io makes use of this module. We then require socket.io and pass it the http module.\\
+
+To listen out for events using socket.io we use the .on method and specify the event we are listening for, in our case the connection event.\\
+
+Let?s add the index.html file so the code actually works.
+\begin{lstlisting}
+<html>
+<head>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+    </style>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    var socket = io();
+</script>
+
+</body>
+</html>
+\end{lstlisting}
+Let?s add another event listener to our server file. This time we will listen on the socket (the parameter passed in the callback) directly. The code should look like this:
+\begin{lstlisting}
+io.on('connection', (socket) => {
+    console.log('a user connected to the socket');
+    socket.on('disconnect', () => console.log('a user left us'));
+});
+\end{lstlisting}
+\subsubsection{emitting events}
+In order to actually listen to events we also need to be able to emit them. Besides a few events like \textcolor{red}{connection} few events are predefined in \textcolor{red}{socket.io}\\
+
+In our case we want to create a simple chat, that means the user will add messages, which would be an ideal event to listen for. So let?s edit the client side logic.
+\begin{lstlisting}
+<script>
+  $(function () {
+    var socket = io();
+    $('form').submit(function(){
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+  });
+</script>
+\end{lstlisting}
+Every time the user adds a new message, socket.io will fire off an event which we can listen out for. So let?s add the relevant code on the server.
+\begin{lstlisting}
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+  });
+});
+
+\end{lstlisting}
+\subsubsection{Broadcasting}
+Now it is time to send something back from the server. Since we want to inform all the participants of the new message. We can broadcast the message back to all listeners. Let?s update our server code.
+\begin{lstlisting}
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+\end{lstlisting}
+As you can see above all we do is listen for a message and then rebroadcast this message to all listening sockets. We do that by emitting an event which the clients listen for.\\
+
+Now we need to listen out on the client for the server broadcast and render the message to the user. Let?s update the html file.
+\begin{lstlisting}
+<script>
+  $(function () {
+    var socket = io();
+    $('form').submit(function(){
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+  });
+</script>
+\end{lstlisting}
+\subsubsection{Using SocketIO with express}
+In order to use SocketIO with express , you have to use the package http to retrieve the server instance from express. Here is the official example from SocketIO:
+\begin{lstlisting}
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+
+// Call listen method ON SERVER!! Not app
+server.listen(80);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+\end{lstlisting}
+
+\subsubsection{Namespaces}
+By default, SocketIO is using the namespace \textcolor{red}{/}. You can actually switch to other namespace to use it with another endpoint(Not URL!!). You can actually making use \textcolor{red}{of} the namespace by the method of on the server-side. On the server side,
+\begin{lstlisting}
+const namespace1 = io.of('/namespace1');  
+namespace1.on('connection',(socket)=>{
+  console.log(`Socket with id ${socket.id} connected!`);
+});
+namespace1.emit('hello',"World!");
+\end{lstlisting}
+On the client side,you can access this namespace1 by providing the name of the namespace.
+\begin{lstlisting}
+let socket = io('/namespace1')
+\end{lstlisting}
+\subsubsection{Rooms}
+Namespaces are good if you want to completely separate the clients. But if you want to concept of subscribing, which one client can listen to multiple channels at the time. Then you have to use \textcolor{red}{Rooms} instead. Here is one simple \textcolor{red}{subscribe} event that can hook the respective socket to the room.
+\begin{lstlisting}
+//Server Side
+io.on('subscribe',(room)=>{
+  socket.join(room);
+});
+
+//Client side
+socket.emit('subscribe','my-room');
+\end{lstlisting}
+To simply send messages to a specific room, you can use the method \textcolor{red}{to}.
+
+\begin{lstlisting}
+io.to('my-room').emit('subscription-reply',"Thanks for subscribing my-room!");
+\end{lstlisting}
+
 
 \section{User Authentication}
+\subsection{Introduction}
 \subsection{Passport.js}
+\subsubsection{Users Data}
+
 \subsection{Bcrypt}
 \subsection{Social Login}
 \subsection{Redis Session}
 
 \section{System Admin}
+\subsection{Introduction}
 \subsection{Digital Ocean}
 \subsection{apt-get}
 \subsection{Bash}
@@ -1132,6 +1324,14 @@ There are mainly three types of association. To illustrate the differences , we 
 \subsection{Process Manager and Nginx}
 \subsection{Git Deployment}
 
-\section{Assignment 4}
+\section{Assignment 4 - chatroom single file}
+
+\section{Hamming}
+\subsection{Introduction}
+
+\section{Software Licensing}
+\subsection{Introduction}
+
+
 
 \end{document}

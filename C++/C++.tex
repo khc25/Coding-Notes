@@ -216,8 +216,20 @@ switch (expression) {
 \begin{eg}
 Here is the example for using switch statement:
 \begin{lstlisting}
-while ((c = getchar()) != EOF) {  /* get a char */      switch (c) {        case ?0?: case ?1?: case ?2?: case ?3?: case ?4?:        case ?5?: case ?6?: case ?7?: case ?8?: case ?9?:         digit_count++;   /* no braces is needed */         break;        case ? ?: case ?\n?: case ?\t?:         white_character_count++;         break;        default:         other_character_count++;         break; 
-   }}
+while ((c = getchar()) != EOF) {  /* get a char */
+      switch (c) {
+        case ?0?: case ?1?: case ?2?: case ?3?: case ?4?:
+        case ?5?: case ?6?: case ?7?: case ?8?: case ?9?:
+         digit_count++;   /* no braces is needed */
+         break;
+        case ? ?: case ?\n?: case ?\t?:
+         white_character_count++;
+         break;
+        default:
+         other_character_count++;
+         break; 
+   }
+}
 \end{lstlisting}
 \end{eg}
 
@@ -229,8 +241,77 @@ while ((c = getchar()) != EOF) {  /* get a char */      switch (c) {        ca
 
 \subsection{For Loop}
 
+\section{Functions}
+\subsection{Introduction}
+\begin{eg}
 
+\end{eg}
+\begin{lstlisting}
+ #include <iostream> using namespace std;void printHello(int n){  for (int i=0;i<n;i++)      cout <<"Hello" <<endl;}void main() {  printHello(10);}
+\end{lstlisting}
 
+\subsection{Calling functions}
+
+\begin{eg}
+
+\end{eg}
+\begin{lstlisting}
+ #include <iostream> using namespace std;void printHello(int n){  for (int i=0;i<n;i++)      cout <<"Hello" <<endl;}
+ 
+ void main() {int x=1;  printHello(x);  printHello(x+3);  printHello(10);}
+\end{lstlisting}
+
+\subsection{Multiple parameters}
+
+\begin{eg}
+
+\end{eg}
+
+\begin{lstlisting}
+#include <iostream> 
+using namespace std;int maxValue(int a, int b){      int m=a;      if (b>a)
+               m=b;      return m;}
+ void main() {       int x , y=4, z=1;       x = maxValue(4,2);}
+\end{lstlisting}
+
+\section{Global and local variable}
+\subsection{Introduction}
+
+\subsection{Example}
+\begin{eg}
+
+\end{eg}
+
+\begin{lstlisting}
+#include <iostream> 
+using namespace std; 
+int num1=4;int num2=9;int maxValue(int a, int b){ /*  Local(maxValue)  */       int m=a;       if (b>a) 
+       m=b;  /*  Local(maxValue)  */       return m; 
+}
+void main() {    int x;  /* Local(main) */    x = maxValue(num1,num2); /* Global   */}
+\end{lstlisting}
+
+\subsection{Parameters Passing: Pass-by-value}
+\begin{itemize}
+\item When a function is invoked, the arguments within the parentheses are passed using a pass-by-value
+\item Each argument is evaluated, and its value is used locally in place of the corresponding formal parameter.
+\end{itemize}
+
+\begin{eg}
+
+\end{eg}
+
+\begin{lstlisting}
+void f (int x) {       x=4; //we modify the value x to 4       //Do we modify y at the same time? NO       y=4; //syntax error: y is local to main}
+void main () {       int y=3;       f(y);       cout << y; //print 3, y remains unchanged}
+\end{lstlisting}
+
+\begin{itemize}
+\item
+\item
+\item
+\item
+\end{itemize}
 
 
 \section{Class}

@@ -22,6 +22,14 @@
 \BOOKMARK [2][-]{subsection.7.1}{While Loop}{section.7}% 22
 \BOOKMARK [2][-]{subsection.7.2}{Do-while Loop}{section.7}% 23
 \BOOKMARK [2][-]{subsection.7.3}{For Loop}{section.7}% 24
-\BOOKMARK [1][-]{section.8}{Class}{}% 25
-\BOOKMARK [2][-]{subsection.8.1}{Constructor}{section.8}% 26
-\BOOKMARK [2][-]{subsection.8.2}{this}{section.8}% 27
+\BOOKMARK [1][-]{section.8}{Functions}{}% 25
+\BOOKMARK [2][-]{subsection.8.1}{Introduction}{section.8}% 26
+\BOOKMARK [2][-]{subsection.8.2}{Calling functions}{section.8}% 27
+\BOOKMARK [2][-]{subsection.8.3}{Multiple parameters}{section.8}% 28
+\BOOKMARK [1][-]{section.9}{Global and local variable}{}% 29
+\BOOKMARK [2][-]{subsection.9.1}{Introduction}{section.9}% 30
+\BOOKMARK [2][-]{subsection.9.2}{Example}{section.9}% 31
+\BOOKMARK [2][-]{subsection.9.3}{Parameters Passing: Pass-by-value}{section.9}% 32
+\BOOKMARK [1][-]{section.10}{Class}{}% 33
+\BOOKMARK [2][-]{subsection.10.1}{Constructor}{section.10}% 34
+\BOOKMARK [2][-]{subsection.10.2}{this}{section.10}% 35
