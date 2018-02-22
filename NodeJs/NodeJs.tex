@@ -75,7 +75,197 @@ in your terminal run  \textcolor{red}{node app.js}
 
 \subsection{fs}
 
+\subsubsection{read files}
+To handle files we can use the node module \textcolor{blue}{fs} which stands for file system. Let?s look at some code and then try to understand what is going on. Let?s create two files, app.js and greet.txt.
+\begin{lstlisting}
+// greet.text
+
+Hello there.
+\end{lstlisting}
+\begin{lstlisting}
+// app.js
+var fs = require('fs');
+
+var greeting = fs.readFileSync(__dirname + '/greet.txt');
+
+console.log(greeting);
+\end{lstlisting}
+\textcolor{red}{\_\_dirname} stands for current directory the node file is running in.\\
+
+Run the code, what does your console log? If you did everything correctly you will see a log of ?<Buffer 48 65 6c 6c 6f 20 74 68 65 72 65 2e 0a>?. That is the buffer with it?s binary encoded data. To make it readable we have to decode it in a suitable format. A list of all formats can be found in the documentation for buffer, for our use case we are interested in \textcolor{red}{utf8}.
+\begin{lstlisting}
+// app.js
+var fs = require('fs');
+
+var greeting = fs.readFileSync(__dirname + '/greet.txt', 'utf8');
+
+console.log(greeting);
+\end{lstlisting}
+As you can see now we get everything in human readable format. However our code could still be improved. We are currently using \textcolor{red}{fs.readFileSync()}. As the name suggests method is synchronous, which we generally should avoid if possible. Imagine you are trying to read a very large file, the code wouldn?t continue until finished reading the file, which would result in a poor user experience. Therefore let?s refactor the code to make it asynchronous.
+\begin{lstlisting}
+// app.js
+var fs = require('fs');
+
+var greeting = fs.readFile(__dirname + '/greet.txt', 'utf8', function(err, data) {
+    console.log(data)
+});
+\end{lstlisting}
+\subsubsection{write files}
+We don?t just want to read files, but also write to files. Let?s look at some code to figure out how we could do that. First we create three files text.txt, textcopy.txt, app.js. Fill the text.txt file with a large amount of lorem ipsum. Generate around 70000 bytes of text.
+\begin{lstlisting}
+var fs = require('fs');
+
+var readable = fs.createReadStream(__dirname + '/text.txt');
+
+readable.on('data', function(chunk){
+    console.log(chunk.length);
+});
+\end{lstlisting}
+\textcolor{red}{createReadStream} emits an event called \textcolor{red}{data}, which we can listen for. The stream fills the buffer with data and emits the event once the buffer is full or all data is read. It then passes on the chunk of data from the buffer and begins to refill the buffer. So we are listening for buffers. \\
+
+If you run the above code you will notice that your console actually displays two buffers. The reason for that is that default buffer size is around 64000 bytes, however our document is 70000 bytes, so it couldn?t be all placed in the buffer at one time.\\
+
+Imagine you have a lot of traffic, than 64000 bytes buffer can be very memory intensive and slow down everything. We can therefore reduce the size of the buffer, using \textcolor{red}{highWaterMark} to let?s say 32kb. Also let?s make it human readable by changing the encoding.
+\begin{lstlisting}
+var fs = require('fs');
+
+var readable = fs.createReadStream(__dirname + '/text.txt', { encoding: 'utf8', highWaterMark: 32*1024 });
+
+readable.on('data', function(chunk){
+    console.log(chunk.length);
+});
+\end{lstlisting}
+Let?s actually start writing to a new file.
+\begin{lstlisting}
+var fs = require('fs');
+
+var readable = fs.createReadStream(__dirname + '/text.txt', { encoding: 'utf8', highWaterMark: 32*1024 });
+
+var writeable = fs.createWriteStream(__dirname + '/textcopy.txt');
+
+readable.on('data', function(chunk){
+    writeable.write(chunk);
+});
+\end{lstlisting}
+Run the code above and check out \textcolor{red}{textcopy.txt}.
+\subsubsection{pipes}
+Connecting two streams by writing from one stream to another. In node you can pipe from a readable stream to a writeable stream. The \textcolor{red}{createReadStream} object includes a pipe method. So we can refactor above?s code a bit.
+\begin{lstlisting}
+var fs = require('fs');
+
+var readable = fs.createReadStream(__dirname + '/text.txt', { encoding: 'utf8', highWaterMark: 32*1024 });
+
+var writeable = fs.createWriteStream(__dirname + '/textcopy.txt');
+
+readable.pipe(writeable);
+\end{lstlisting}
+If you run this code you?ll notice it achieves exactly the same as the previous code, it is just a lot easier and cleaner to write.\\
+
+Quick note regarding the video below, doing a server will be covered in the next section, so feel free to skip the end.
 \subsection{Web Server}
+\subsubsection{API}
+We have already come across APIs before, let?s quickly remind ourself what APIs are. APIs can be imagined as access to a set of tools that help us write software. These tools are other software. In terms of the web APIs are just URLs that send and accept data, through http.\\
+
+An API consists out of endpoints, the different URLs of the API.\\
+
+Keeping that in mind let?s put some code down to create our own API:\\
+\begin{lstlisting}
+var http = require('http');
+
+http.createServer(function(req, res){
+
+    // respond to the request
+
+    res.writeHead(200, { 'Content-Type':'text/plain' });
+    res.end('Hello world');
+
+}).listen(8080, '127.0.0.1');
+\end{lstlisting}
+
+
+\subsubsection{Serving files}
+Sending some plain text isn?t really that handy if we want to display complex websites to the user. So let?s serve some HTML. Create two files index.html and app.js
+\begin{lstlisting}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello World</title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+    </body>
+</html>
+\end{lstlisting}
+\begin{lstlisting}
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function(req, res){
+
+    res.writeHead(200, { 'Content-Type':'text/html' });
+    fs.createReadStream(__dirname + '/index.html').pipe(res);
+
+}).listen(8080, '127.0.0.1');
+\end{lstlisting}
+Serve the page via node and check it out in the browser. If you want to you can make changes to the HTML file and refresh the browser window, you should see those changes implemented, without having to restart node. That is because node only runs the JavaScript file and pipes your HTML file anew every time the page is loaded.
+\subsubsection{sending data}
+The most common way to transmit data from a server to another server or frontend is through the JSON format. Since JSON is very similar to a JS object, sending JSON through node is an extremely easy process.
+\begin{lstlisting}
+var http = require('http');
+
+http.createServer(function(req, res){
+
+    res.writeHead(200, { 'Content-Type':'application/json' });
+    var obj = {
+        name: 'John',
+        surname: 'Doe'
+    }
+    res.end(JSON.stringify(obj));
+
+}).listen(8080, '127.0.0.1');
+\end{lstlisting}
+\textcolor{red}{JSON.stringify()} transforms the JS object into JSON. Now your JS on the front end will know how to deal with the object.
+\subsubsection{routing}
+So far we only accepted requests on one route. However that doesn?t really help us serve more than one file. Let?s go back to our html example and change the html, below the heading include an image.
+\begin{lstlisting}
+<img src="/assets/image.png" />
+\end{lstlisting}
+\begin{lstlisting}
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function(req, res){
+    fs.createReadStream(__dirname + '/index.html').pipe(res);
+}).listen(8080, '127.0.0.1');
+\end{lstlisting}
+run the code and try to find the image on the website. It won?t appear, the problem is that we every request to node will return a the html page. When the browser tries to load the image, it will make a request for the image to the node server, but node will just return the same html page.\\
+
+In order to change that, we need to actually look at the request the node server is receiving.
+
+\begin{lstlisting}
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function(req, res){
+    if(req.url === '/') {
+        fs.createReadStream(__dirname + '/index.html').pipe(res);
+    } else if(req.url === '/assets/image.png') {
+        fs.createReadStream(__dirname + '/assets/image.png').pipe(res);
+    } else {
+        res.writeHead(404);
+        res.end();
+    }
+
+}).listen(8080, '127.0.0.1');
+\end{lstlisting}
+The request object includes a \textcolor{red}{url} property which contains the path the request was made to. So we can use that path and determine which document to return. If we receive the image path we return the image, and so on.\\
+
+It could also happen that a request was made to a path we haven?t defined yet, in that case we need to return something otherwise node won?t know what to do and stop working. So we just return a header containing 404.
+
+
+
+
+
 
 \section{Node packages}
 \subsection{npm}
@@ -85,7 +275,13 @@ npm comes installed with node. You can find packages on the official npm \href{h
 
 \subsubsection{npm init}
 
+\subsubsection{package.json}
 
+\subsubsection{installing global packages}
+
+\subsubsection{dev dependencies}
+
+\subsubsection{GitHub and .gitignore}
 \subsection{Express}
 Express is a npm package that allows us to set up servers on node in a more straightforward manner.\\
 
@@ -693,11 +889,6 @@ Create a module that contains a promised version of fs.readdir and fs.stat. Simi
 \subsection{Questions and solutions}
 
 
-\section{Data Structure}
-\subsection{List, Map and Set}
-\subsection{Stack and Queue}
-
-\section{HTTP Header}
 
 \section{Jasmine}
 \subsection{Introduction}
@@ -1020,11 +1211,7 @@ Because by default the express-basic-auth does not challenge the user. We have t
 Postman is a popular tool for testing HTTP request/response, espeically RESTful APIs. 
 \subsubsection{Where can I get Postman}
 \href{https://www.getpostman.com/postman}{\textcolor{blue}{Download it here}}
-\section{Algorithm}
-\subsection{Sorting}
-\subsection{Searching}
 
-\section{Dependency Injection}
 
 \section{Assignment 2 - notes taking file}
 
@@ -1131,7 +1318,7 @@ There are mainly three types of association. To illustrate the differences , we 
 
 \subsection{Database Design}
 
-\section{Operating System}
+
 
 \section{Assignment 3 - notes taking knex}
 
@@ -1325,6 +1512,22 @@ io.to('my-room').emit('subscription-reply',"Thanks for subscribing my-room!");
 \subsection{Git Deployment}
 
 \section{Assignment 4 - chatroom single file}
+
+\section{Extension topics}
+
+\section{Data Structure}
+\subsection{List, Map and Set}
+\subsection{Stack and Queue}
+
+\section{HTTP Header}
+
+\section{Algorithm}
+\subsection{Sorting}
+\subsection{Searching}
+
+\section{Dependency Injection}
+
+\section{Operating System}
 
 \section{Hamming}
 \subsection{Introduction}

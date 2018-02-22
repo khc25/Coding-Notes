@@ -3,124 +3,143 @@
 \contentsline {subsection}{\numberline {1.2}Events}{5}{subsection.1.2}
 \contentsline {subsection}{\numberline {1.3}Asynchronous code and callbacks}{5}{subsection.1.3}
 \contentsline {subsection}{\numberline {1.4}fs}{5}{subsection.1.4}
-\contentsline {subsection}{\numberline {1.5}Web Server}{5}{subsection.1.5}
-\contentsline {section}{\numberline {2}Node packages}{6}{section.2}
-\contentsline {subsection}{\numberline {2.1}npm}{6}{subsection.2.1}
-\contentsline {subsubsection}{\numberline {2.1.1}npm init}{6}{subsubsection.2.1.1}
-\contentsline {subsection}{\numberline {2.2}Express}{6}{subsection.2.2}
-\contentsline {subsubsection}{\numberline {2.2.1}Routing}{7}{subsubsection.2.2.1}
-\contentsline {subsubsection}{\numberline {2.2.2}Serving static files}{7}{subsubsection.2.2.2}
-\contentsline {subsubsection}{\numberline {2.2.3}Creating middleware}{7}{subsubsection.2.2.3}
-\contentsline {subsubsection}{\numberline {2.2.4}Form Submission}{7}{subsubsection.2.2.4}
-\contentsline {subsection}{\numberline {2.3}Express middleware}{10}{subsection.2.3}
-\contentsline {subsubsection}{\numberline {2.3.1}Body parser}{10}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Url query string}{11}{subsubsection.2.3.2}
-\contentsline {subsection}{\numberline {2.4}Request Response Cycle}{12}{subsection.2.4}
-\contentsline {subsubsection}{\numberline {2.4.1}Request}{12}{subsubsection.2.4.1}
-\contentsline {subsubsection}{\numberline {2.4.2}Response}{12}{subsubsection.2.4.2}
-\contentsline {subsubsection}{\numberline {2.4.3}Visualisation}{12}{subsubsection.2.4.3}
-\contentsline {subsection}{\numberline {2.5}Cookies and Session}{12}{subsection.2.5}
-\contentsline {subsubsection}{\numberline {2.5.1}cookie parser}{12}{subsubsection.2.5.1}
-\contentsline {subsubsection}{\numberline {2.5.2}cookie session}{13}{subsubsection.2.5.2}
-\contentsline {section}{\numberline {3}Promises}{14}{section.3}
-\contentsline {subsubsection}{\numberline {3.0.1}Promises}{14}{subsubsection.3.0.1}
-\contentsline {subsubsection}{\numberline {3.0.2}fetch}{15}{subsubsection.3.0.2}
-\contentsline {subsubsection}{\numberline {3.0.3}Axios}{16}{subsubsection.3.0.3}
-\contentsline {subsubsection}{\numberline {3.0.4}Applying Promise to asynchronous code}{16}{subsubsection.3.0.4}
-\contentsline {subsubsection}{\numberline {3.0.5}Promise.all}{16}{subsubsection.3.0.5}
-\contentsline {subsubsection}{\numberline {3.0.6}Async \& Await}{17}{subsubsection.3.0.6}
-\contentsline {subsubsection}{\numberline {3.0.7}Async version $\DOTSB \tmspace +\thickmuskip {.2777em}\DOTSB \Leftarrow \joinrel \Rightarrow \tmspace +\thickmuskip {.2777em}$ Promise version Correspondence}{18}{subsubsection.3.0.7}
-\contentsline {subsubsection}{\numberline {3.0.8}Promise.all for Async}{18}{subsubsection.3.0.8}
-\contentsline {section}{\numberline {4}Assignment 1 - dropbox with cache}{20}{section.4}
-\contentsline {subsection}{\numberline {4.1}Introduction}{20}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Questions and solutions}{20}{subsection.4.2}
-\contentsline {section}{\numberline {5}Data Structure}{21}{section.5}
-\contentsline {subsection}{\numberline {5.1}List, Map and Set}{21}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Stack and Queue}{21}{subsection.5.2}
-\contentsline {section}{\numberline {6}HTTP Header}{22}{section.6}
-\contentsline {section}{\numberline {7}Jasmine}{23}{section.7}
-\contentsline {subsection}{\numberline {7.1}Introduction}{23}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Expectation and Matcher}{23}{subsection.7.2}
-\contentsline {subsection}{\numberline {7.3}Setup and Teardown}{23}{subsection.7.3}
-\contentsline {subsection}{\numberline {7.4}Jasmine Spies}{23}{subsection.7.4}
-\contentsline {subsection}{\numberline {7.5}Async and Clock}{23}{subsection.7.5}
-\contentsline {subsection}{\numberline {7.6}Supertest}{23}{subsection.7.6}
-\contentsline {section}{\numberline {8}API and Handlebars}{24}{section.8}
-\contentsline {subsection}{\numberline {8.1}Introduction}{24}{subsection.8.1}
-\contentsline {subsection}{\numberline {8.2}Restful APIs}{24}{subsection.8.2}
-\contentsline {subsection}{\numberline {8.3}API Methods}{24}{subsection.8.3}
-\contentsline {subsubsection}{\numberline {8.3.1}API Structure}{24}{subsubsection.8.3.1}
-\contentsline {subsubsection}{\numberline {8.3.2}HTTP Methods}{24}{subsubsection.8.3.2}
-\contentsline {subsubsection}{\numberline {8.3.3}Express example}{24}{subsubsection.8.3.3}
-\contentsline {subsubsection}{\numberline {8.3.4}API Response}{25}{subsubsection.8.3.4}
-\contentsline {subsubsection}{\numberline {8.3.5}Scaling the API}{25}{subsubsection.8.3.5}
-\contentsline {subsubsection}{\numberline {8.3.6}REST vs RPC vs GraphQL}{26}{subsubsection.8.3.6}
-\contentsline {subsection}{\numberline {8.4}HTML Template}{26}{subsection.8.4}
-\contentsline {subsection}{\numberline {8.5}Handlebars}{26}{subsection.8.5}
-\contentsline {subsubsection}{\numberline {8.5.1}Server side vs Client side rendering}{26}{subsubsection.8.5.1}
-\contentsline {subsubsection}{\numberline {8.5.2}Handlebars}{27}{subsubsection.8.5.2}
-\contentsline {subsubsection}{\numberline {8.5.3}Basic folder structure}{27}{subsubsection.8.5.3}
-\contentsline {subsubsection}{\numberline {8.5.4}Main Handlebars}{27}{subsubsection.8.5.4}
-\contentsline {subsubsection}{\numberline {8.5.5}Layouts}{28}{subsubsection.8.5.5}
-\contentsline {subsubsection}{\numberline {8.5.6}Partials}{29}{subsubsection.8.5.6}
-\contentsline {subsection}{\numberline {8.6}Basic Authentication}{29}{subsection.8.6}
-\contentsline {subsubsection}{\numberline {8.6.1}Adding Basic Auth to Express}{30}{subsubsection.8.6.1}
-\contentsline {subsubsection}{\numberline {8.6.2}Authenticating different users}{30}{subsubsection.8.6.2}
-\contentsline {subsection}{\numberline {8.7}Postman}{31}{subsection.8.7}
-\contentsline {subsubsection}{\numberline {8.7.1}What is Postman?}{31}{subsubsection.8.7.1}
-\contentsline {subsubsection}{\numberline {8.7.2}Where can I get Postman}{31}{subsubsection.8.7.2}
-\contentsline {section}{\numberline {9}Algorithm}{32}{section.9}
-\contentsline {subsection}{\numberline {9.1}Sorting}{32}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Searching}{32}{subsection.9.2}
-\contentsline {section}{\numberline {10}Dependency Injection}{33}{section.10}
-\contentsline {section}{\numberline {11}Assignment 2 - notes taking file}{34}{section.11}
-\contentsline {section}{\numberline {12}SQL}{35}{section.12}
-\contentsline {subsection}{\numberline {12.1}Introduction}{35}{subsection.12.1}
-\contentsline {subsubsection}{\numberline {12.1.1}Setting up}{35}{subsubsection.12.1.1}
-\contentsline {subsubsection}{\numberline {12.1.2}Creating a database}{35}{subsubsection.12.1.2}
-\contentsline {subsubsection}{\numberline {12.1.3}Setting up user}{35}{subsubsection.12.1.3}
-\contentsline {subsection}{\numberline {12.2}Adding, updating and deleting data}{35}{subsection.12.2}
-\contentsline {subsection}{\numberline {12.3}Querying data}{35}{subsection.12.3}
-\contentsline {subsection}{\numberline {12.4}Node \& PostgreSQL}{35}{subsection.12.4}
-\contentsline {subsubsection}{\numberline {12.4.1}PostgreSQL}{35}{subsubsection.12.4.1}
-\contentsline {subsubsection}{\numberline {12.4.2}SQL injection}{36}{subsubsection.12.4.2}
-\contentsline {subsection}{\numberline {12.5}SQL joins}{36}{subsection.12.5}
-\contentsline {subsubsection}{\numberline {12.5.1}Primary Key and Foreign Key}{36}{subsubsection.12.5.1}
-\contentsline {subsubsection}{\numberline {12.5.2}Join}{36}{subsubsection.12.5.2}
-\contentsline {subsubsection}{\numberline {12.5.3}Different type of JOINs}{36}{subsubsection.12.5.3}
-\contentsline {subsection}{\numberline {12.6}Transaction}{36}{subsection.12.6}
-\contentsline {subsubsection}{\numberline {12.6.1}Database Transactior}{36}{subsubsection.12.6.1}
-\contentsline {section}{\numberline {13}Knex}{37}{section.13}
-\contentsline {subsection}{\numberline {13.1}Knex.JS}{37}{subsection.13.1}
-\contentsline {subsection}{\numberline {13.2}Knex migrations CLI}{37}{subsection.13.2}
-\contentsline {section}{\numberline {14}Database Theory}{38}{section.14}
-\contentsline {subsection}{\numberline {14.1}Introduction}{38}{subsection.14.1}
-\contentsline {subsection}{\numberline {14.2}Associations}{38}{subsection.14.2}
-\contentsline {subsubsection}{\numberline {14.2.1}Different Types of Associations}{38}{subsubsection.14.2.1}
-\contentsline {subsection}{\numberline {14.3}Database Design}{38}{subsection.14.3}
-\contentsline {section}{\numberline {15}Operating System}{39}{section.15}
-\contentsline {section}{\numberline {16}Assignment 3 - notes taking knex}{40}{section.16}
-\contentsline {section}{\numberline {17}Redis}{41}{section.17}
-\contentsline {subsection}{\numberline {17.1}Introduction}{41}{subsection.17.1}
-\contentsline {subsection}{\numberline {17.2}Redis and node}{41}{subsection.17.2}
-\contentsline {section}{\numberline {18}Websockets}{42}{section.18}
-\contentsline {subsection}{\numberline {18.1}Socket.io}{42}{subsection.18.1}
-\contentsline {section}{\numberline {19}User Authentication}{43}{section.19}
-\contentsline {subsection}{\numberline {19.1}Introduction}{43}{subsection.19.1}
-\contentsline {subsection}{\numberline {19.2}Passport.js}{43}{subsection.19.2}
-\contentsline {subsection}{\numberline {19.3}Bcrypt}{43}{subsection.19.3}
-\contentsline {subsection}{\numberline {19.4}Social Login}{43}{subsection.19.4}
-\contentsline {subsection}{\numberline {19.5}Redis Session}{43}{subsection.19.5}
-\contentsline {section}{\numberline {20}System Admin}{44}{section.20}
-\contentsline {subsection}{\numberline {20.1}Introduction}{44}{subsection.20.1}
-\contentsline {subsection}{\numberline {20.2}Digital Ocean}{44}{subsection.20.2}
-\contentsline {subsection}{\numberline {20.3}apt-get}{44}{subsection.20.3}
-\contentsline {subsection}{\numberline {20.4}Bash}{44}{subsection.20.4}
-\contentsline {subsection}{\numberline {20.5}NodeJs Setup}{44}{subsection.20.5}
-\contentsline {subsection}{\numberline {20.6}Process Manager and Nginx}{44}{subsection.20.6}
-\contentsline {subsection}{\numberline {20.7}Git Deployment}{44}{subsection.20.7}
-\contentsline {section}{\numberline {21}Assignment 4 - chatroom single file}{45}{section.21}
-\contentsline {section}{\numberline {22}Hamming}{46}{section.22}
-\contentsline {subsection}{\numberline {22.1}Introduction}{46}{subsection.22.1}
-\contentsline {section}{\numberline {23}Software Licensing}{47}{section.23}
-\contentsline {subsection}{\numberline {23.1}Introduction}{47}{subsection.23.1}
+\contentsline {subsubsection}{\numberline {1.4.1}read files}{5}{subsubsection.1.4.1}
+\contentsline {subsubsection}{\numberline {1.4.2}write files}{6}{subsubsection.1.4.2}
+\contentsline {subsubsection}{\numberline {1.4.3}pipes}{7}{subsubsection.1.4.3}
+\contentsline {subsection}{\numberline {1.5}Web Server}{7}{subsection.1.5}
+\contentsline {subsubsection}{\numberline {1.5.1}API}{7}{subsubsection.1.5.1}
+\contentsline {subsubsection}{\numberline {1.5.2}Serving files}{8}{subsubsection.1.5.2}
+\contentsline {subsubsection}{\numberline {1.5.3}sending data}{8}{subsubsection.1.5.3}
+\contentsline {subsubsection}{\numberline {1.5.4}routing}{8}{subsubsection.1.5.4}
+\contentsline {section}{\numberline {2}Node packages}{10}{section.2}
+\contentsline {subsection}{\numberline {2.1}npm}{10}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}npm init}{10}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}package.json}{10}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}installing global packages}{10}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}dev dependencies}{10}{subsubsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.5}GitHub and .gitignore}{10}{subsubsection.2.1.5}
+\contentsline {subsection}{\numberline {2.2}Express}{10}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Routing}{11}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Serving static files}{11}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Creating middleware}{11}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Form Submission}{12}{subsubsection.2.2.4}
+\contentsline {subsection}{\numberline {2.3}Express middleware}{14}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Body parser}{14}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Url query string}{15}{subsubsection.2.3.2}
+\contentsline {subsection}{\numberline {2.4}Request Response Cycle}{16}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.4.1}Request}{16}{subsubsection.2.4.1}
+\contentsline {subsubsection}{\numberline {2.4.2}Response}{16}{subsubsection.2.4.2}
+\contentsline {subsubsection}{\numberline {2.4.3}Visualisation}{16}{subsubsection.2.4.3}
+\contentsline {subsection}{\numberline {2.5}Cookies and Session}{16}{subsection.2.5}
+\contentsline {subsubsection}{\numberline {2.5.1}cookie parser}{16}{subsubsection.2.5.1}
+\contentsline {subsubsection}{\numberline {2.5.2}cookie session}{17}{subsubsection.2.5.2}
+\contentsline {section}{\numberline {3}Promises}{19}{section.3}
+\contentsline {subsubsection}{\numberline {3.0.1}Promises}{19}{subsubsection.3.0.1}
+\contentsline {subsubsection}{\numberline {3.0.2}fetch}{20}{subsubsection.3.0.2}
+\contentsline {subsubsection}{\numberline {3.0.3}Axios}{21}{subsubsection.3.0.3}
+\contentsline {subsubsection}{\numberline {3.0.4}Applying Promise to asynchronous code}{21}{subsubsection.3.0.4}
+\contentsline {subsubsection}{\numberline {3.0.5}Promise.all}{21}{subsubsection.3.0.5}
+\contentsline {subsubsection}{\numberline {3.0.6}Async \& Await}{22}{subsubsection.3.0.6}
+\contentsline {subsubsection}{\numberline {3.0.7}Async version $\DOTSB \tmspace +\thickmuskip {.2777em}\DOTSB \Leftarrow \joinrel \Rightarrow \tmspace +\thickmuskip {.2777em}$ Promise version Correspondence}{23}{subsubsection.3.0.7}
+\contentsline {subsubsection}{\numberline {3.0.8}Promise.all for Async}{23}{subsubsection.3.0.8}
+\contentsline {section}{\numberline {4}Assignment 1 - dropbox with cache}{25}{section.4}
+\contentsline {subsection}{\numberline {4.1}Introduction}{25}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Questions and solutions}{25}{subsection.4.2}
+\contentsline {section}{\numberline {5}Jasmine}{26}{section.5}
+\contentsline {subsection}{\numberline {5.1}Introduction}{26}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Expectation and Matcher}{26}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Setup and Teardown}{26}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Jasmine Spies}{26}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}Async and Clock}{26}{subsection.5.5}
+\contentsline {subsection}{\numberline {5.6}Supertest}{26}{subsection.5.6}
+\contentsline {section}{\numberline {6}API and Handlebars}{27}{section.6}
+\contentsline {subsection}{\numberline {6.1}Introduction}{27}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Restful APIs}{27}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}API Methods}{27}{subsection.6.3}
+\contentsline {subsubsection}{\numberline {6.3.1}API Structure}{27}{subsubsection.6.3.1}
+\contentsline {subsubsection}{\numberline {6.3.2}HTTP Methods}{27}{subsubsection.6.3.2}
+\contentsline {subsubsection}{\numberline {6.3.3}Express example}{27}{subsubsection.6.3.3}
+\contentsline {subsubsection}{\numberline {6.3.4}API Response}{28}{subsubsection.6.3.4}
+\contentsline {subsubsection}{\numberline {6.3.5}Scaling the API}{28}{subsubsection.6.3.5}
+\contentsline {subsubsection}{\numberline {6.3.6}REST vs RPC vs GraphQL}{29}{subsubsection.6.3.6}
+\contentsline {subsection}{\numberline {6.4}HTML Template}{29}{subsection.6.4}
+\contentsline {subsection}{\numberline {6.5}Handlebars}{29}{subsection.6.5}
+\contentsline {subsubsection}{\numberline {6.5.1}Server side vs Client side rendering}{29}{subsubsection.6.5.1}
+\contentsline {subsubsection}{\numberline {6.5.2}Handlebars}{30}{subsubsection.6.5.2}
+\contentsline {subsubsection}{\numberline {6.5.3}Basic folder structure}{30}{subsubsection.6.5.3}
+\contentsline {subsubsection}{\numberline {6.5.4}Main Handlebars}{30}{subsubsection.6.5.4}
+\contentsline {subsubsection}{\numberline {6.5.5}Layouts}{31}{subsubsection.6.5.5}
+\contentsline {subsubsection}{\numberline {6.5.6}Partials}{32}{subsubsection.6.5.6}
+\contentsline {subsection}{\numberline {6.6}Basic Authentication}{32}{subsection.6.6}
+\contentsline {subsubsection}{\numberline {6.6.1}Adding Basic Auth to Express}{33}{subsubsection.6.6.1}
+\contentsline {subsubsection}{\numberline {6.6.2}Authenticating different users}{33}{subsubsection.6.6.2}
+\contentsline {subsection}{\numberline {6.7}Postman}{34}{subsection.6.7}
+\contentsline {subsubsection}{\numberline {6.7.1}What is Postman?}{34}{subsubsection.6.7.1}
+\contentsline {subsubsection}{\numberline {6.7.2}Where can I get Postman}{34}{subsubsection.6.7.2}
+\contentsline {section}{\numberline {7}Assignment 2 - notes taking file}{35}{section.7}
+\contentsline {section}{\numberline {8}SQL}{36}{section.8}
+\contentsline {subsection}{\numberline {8.1}Introduction}{36}{subsection.8.1}
+\contentsline {subsubsection}{\numberline {8.1.1}Setting up}{36}{subsubsection.8.1.1}
+\contentsline {subsubsection}{\numberline {8.1.2}Creating a database}{36}{subsubsection.8.1.2}
+\contentsline {subsubsection}{\numberline {8.1.3}Setting up user}{37}{subsubsection.8.1.3}
+\contentsline {subsection}{\numberline {8.2}Adding, updating and deleting data}{37}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Querying data}{37}{subsection.8.3}
+\contentsline {subsection}{\numberline {8.4}Node \& PostgreSQL}{37}{subsection.8.4}
+\contentsline {subsubsection}{\numberline {8.4.1}PostgreSQL}{37}{subsubsection.8.4.1}
+\contentsline {subsubsection}{\numberline {8.4.2}SQL injection}{37}{subsubsection.8.4.2}
+\contentsline {subsection}{\numberline {8.5}SQL joins}{37}{subsection.8.5}
+\contentsline {subsubsection}{\numberline {8.5.1}Primary Key and Foreign Key}{37}{subsubsection.8.5.1}
+\contentsline {subsubsection}{\numberline {8.5.2}Join}{37}{subsubsection.8.5.2}
+\contentsline {subsubsection}{\numberline {8.5.3}Different type of JOINs}{37}{subsubsection.8.5.3}
+\contentsline {subsection}{\numberline {8.6}Transaction}{37}{subsection.8.6}
+\contentsline {subsubsection}{\numberline {8.6.1}Database Transactior}{37}{subsubsection.8.6.1}
+\contentsline {section}{\numberline {9}Knex}{38}{section.9}
+\contentsline {subsection}{\numberline {9.1}Knex.JS}{38}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Knex migrations CLI}{38}{subsection.9.2}
+\contentsline {section}{\numberline {10}Database Theory}{39}{section.10}
+\contentsline {subsection}{\numberline {10.1}Introduction}{39}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}Associations}{39}{subsection.10.2}
+\contentsline {subsubsection}{\numberline {10.2.1}Different Types of Associations}{39}{subsubsection.10.2.1}
+\contentsline {subsection}{\numberline {10.3}Database Design}{39}{subsection.10.3}
+\contentsline {section}{\numberline {11}Assignment 3 - notes taking knex}{40}{section.11}
+\contentsline {section}{\numberline {12}Redis}{41}{section.12}
+\contentsline {subsection}{\numberline {12.1}Introduction}{41}{subsection.12.1}
+\contentsline {subsection}{\numberline {12.2}Redis and node}{41}{subsection.12.2}
+\contentsline {section}{\numberline {13}Websockets}{42}{section.13}
+\contentsline {subsection}{\numberline {13.1}Introduction}{42}{subsection.13.1}
+\contentsline {subsection}{\numberline {13.2}Socket.io}{42}{subsection.13.2}
+\contentsline {subsubsection}{\numberline {13.2.1}emitting events}{43}{subsubsection.13.2.1}
+\contentsline {subsubsection}{\numberline {13.2.2}Broadcasting}{43}{subsubsection.13.2.2}
+\contentsline {subsubsection}{\numberline {13.2.3}Using SocketIO with express}{44}{subsubsection.13.2.3}
+\contentsline {subsubsection}{\numberline {13.2.4}Namespaces}{44}{subsubsection.13.2.4}
+\contentsline {subsubsection}{\numberline {13.2.5}Rooms}{45}{subsubsection.13.2.5}
+\contentsline {section}{\numberline {14}User Authentication}{46}{section.14}
+\contentsline {subsection}{\numberline {14.1}Introduction}{46}{subsection.14.1}
+\contentsline {subsection}{\numberline {14.2}Passport.js}{46}{subsection.14.2}
+\contentsline {subsubsection}{\numberline {14.2.1}Users Data}{46}{subsubsection.14.2.1}
+\contentsline {subsection}{\numberline {14.3}Bcrypt}{46}{subsection.14.3}
+\contentsline {subsection}{\numberline {14.4}Social Login}{46}{subsection.14.4}
+\contentsline {subsection}{\numberline {14.5}Redis Session}{46}{subsection.14.5}
+\contentsline {section}{\numberline {15}System Admin}{47}{section.15}
+\contentsline {subsection}{\numberline {15.1}Introduction}{47}{subsection.15.1}
+\contentsline {subsection}{\numberline {15.2}Digital Ocean}{47}{subsection.15.2}
+\contentsline {subsection}{\numberline {15.3}apt-get}{47}{subsection.15.3}
+\contentsline {subsection}{\numberline {15.4}Bash}{47}{subsection.15.4}
+\contentsline {subsection}{\numberline {15.5}NodeJs Setup}{47}{subsection.15.5}
+\contentsline {subsection}{\numberline {15.6}Process Manager and Nginx}{47}{subsection.15.6}
+\contentsline {subsection}{\numberline {15.7}Git Deployment}{47}{subsection.15.7}
+\contentsline {section}{\numberline {16}Assignment 4 - chatroom single file}{48}{section.16}
+\contentsline {section}{\numberline {17}Extension topics}{49}{section.17}
+\contentsline {section}{\numberline {18}Data Structure}{50}{section.18}
+\contentsline {subsection}{\numberline {18.1}List, Map and Set}{50}{subsection.18.1}
+\contentsline {subsection}{\numberline {18.2}Stack and Queue}{50}{subsection.18.2}
+\contentsline {section}{\numberline {19}HTTP Header}{51}{section.19}
+\contentsline {section}{\numberline {20}Algorithm}{52}{section.20}
+\contentsline {subsection}{\numberline {20.1}Sorting}{52}{subsection.20.1}
+\contentsline {subsection}{\numberline {20.2}Searching}{52}{subsection.20.2}
+\contentsline {section}{\numberline {21}Dependency Injection}{53}{section.21}
+\contentsline {section}{\numberline {22}Operating System}{54}{section.22}
+\contentsline {section}{\numberline {23}Hamming}{55}{section.23}
+\contentsline {subsection}{\numberline {23.1}Introduction}{55}{subsection.23.1}
+\contentsline {section}{\numberline {24}Software Licensing}{56}{section.24}
+\contentsline {subsection}{\numberline {24.1}Introduction}{56}{subsection.24.1}
