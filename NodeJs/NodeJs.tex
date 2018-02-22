@@ -1497,6 +1497,7 @@ The whole blue area is the data that is FULL OUTER joined.\\
 
 \subsection{Transaction}
 A Transaction is a unit of work performed which normally includes batch of command that you want to run reliabily independent of other transaction.
+
 \subsubsection{Database Transaction}
 Any change on the data of the database can be represented by as a transaction. But normally transactions is used to make sure two things:\\
 
@@ -1505,11 +1506,11 @@ Any change on the data of the database can be represented by as a transaction. B
 \item To make sure that concurrent access on the data will not corrupt the data in an unexpected way. Hence either the changes on the data is completed successfully. Or the data is failed completely.
 \end{enumerate}
 
-The best way to understand this concept is through a hypothetical scenario of doing a bank transfer between two person, Alice and Bob. Let’s say Alice has $1000 in her account, she wants to transfer it to Bob. Therefore she logged in to the E-Banking platform to perform the transfer. There are two trivial steps for this transfer which are as follow,\\
+The best way to understand this concept is through a hypothetical scenario of doing a bank transfer between two person, Alice and Bob. Let’s say Alice has 1000 dollar in her account, she wants to transfer it to Bob. Therefore she logged in to the E-Banking platform to perform the transfer. There are two trivial steps for this transfer which are as follow,\\
 
 \begin{enumerate}
-\item Withdraw $\$1000$ from Alice Account
-\item Deposit $\$1000$ to Bob Account
+\item Withdraw 1000 dollar from Alice Account
+\item Deposit 1000 dollar to Bob Account
 \end{enumerate}
 
 The hypothetical SQL that are going to be run are as follow
@@ -1519,10 +1520,789 @@ The hypothetical SQL that are going to be run are as follow
  UPDATE bank_accounts SET amount = amount + 1000 WHERE account_holder = 'Bob';
 \end{lstlisting}
 
-\section{Knex}
-\subsection{Knex.JS}
+Let’s say Alice types the amount of \$1000 correctly and the amount is deducted successfully by the first SQL. Suddenly, the bank discovers that Bob is involved with money laundering and his account is frozen as the governement is investigating him. As a result, the amount should not be deposited to Bob’s account , otherwise it is illegal for the bank to do so. Using common sense in how bank transfer works in real life, we can deduce that the correct way of handling this error is the transfer amount should go back to Alice’s account. And the whole transfer is failed.\\
 
+We have two ways of solving this problem:\\
+
+\begin{enumerate}
+\item Un-do what you have already done with another SQL
+\item Use Database transaction.
+\end{enumerate}
+For 1, it simply means that we have to run an additional SQL that un-do what is done already by the previous SQL. But is impractical in real life because we are not going to write a un-do SQL for every SQL we have written.\\
+
+Therefore database transaction comes to rescue.
+
+\subsubsection{Lifecycle of a Transaction}
+The lifecycle of a transaction could be represented in the following pictures.
+\includegraphics{img/transaction_states.png}
+\begin{itemize}
+\item Begin: The whole transaction begins when Alice confirm the transfer.
+\item Actual SQL: involves running the SQL to update the amount of Alice’s account and Bob’s account respectively.
+\item Commit: If everything works fine and Bob is not involved in money laundering at all, then the changes are commited and the transfer is successful.
+\item Rollback: Otherwise all the changes are rolled back(go back to the state before any changes) and the transfer is a failure in the case of a frozen account from Bob.
+\end{itemize}
+
+\subsubsection{SQL Command: Begin, Commit and Rollback}
+You can run the control the transaction explicitly in the psql shell. Before running your data-changing SQL. Run BEGIN to start the transaction
+\begin{lstlisting}
+BEGIN;
+\end{lstlisting}
+And then run your SQL like usual. If everything works fine, run commit to declare that the transaction is successful.
+\begin{lstlisting}  
+ COMMIT;
+\end{lstlisting}
+Otherwise, run rollback to declare that the transaction is a failure, all of the changes are going to be rolled back.
+\begin{lstlisting}
+ROLLBACK;
+\end{lstlisting}
+
+\subsubsection{Isolation in transaction}
+Every transaction is isolated from other transaction . Until you commited your changes in the current transaction , the changes you have made ARE NOT accessible from other transactions. Your instructor can demonstrate this to you.\\
+
+Going back to the example mentioned in the beginning, if Charlie is accessing Alice account while the transaciton is taking place, Charlie does not know that Alice is doing a transfer until the transaction is commited.
+
+\subsubsection{PgClient transaction}
+You can also use transaction with PgClient easily. Here is an example of using PgClient to manage a transaction manually. But PgClient does not have a special API to manage transactions. Therefore we are going to show you how to write a simple API to make writing transactional code easier.
+\begin{lstlisting}
+  // The connection part are omitted. Just assume that we have a variable called client which can access the DB.
+
+    function begin(done){
+        client.query('BEGIN',function(err){
+            if(err){
+                // Handle error here
+            }
+            done();
+        });
+    }
+
+    function commit(done){
+        client.query('COMMIT',function(err){
+            if(err){
+                //Handle error here
+            }
+            done();
+        });
+    }
+    function rollback(done){
+        client.query('ROLLBACK',function(err){
+            if(err){
+                //Handle error here
+            }
+            done();
+        });
+    }
+
+    begin(function(){
+        client.query("UPDATE bank_accounts SET amount = amount - 1000 WHERE account_holder = 'Alice'",function(err,results){
+            if(err){
+                rollback(function(){
+                    console.log("Transaction is rolled back!");
+                });
+            }else{
+                commit(function(){
+                    console.log("Transaction is committed!");
+                });
+            }
+        });
+    });
+\end{lstlisting}
+
+\subsubsection{ACID Principle}
+All database transactions should fulfill the ACID principle which are four different properties that are as follow. The definitions below are from Wikipedia which defined the terms accurately.
+\begin{itemize}
+\item Atomcity Atomicity requires that each transaction be “all or nothing”: if one part of the transaction fails, then the entire transaction fails, and the database state is left unchanged. An atomic system must guarantee atomicity in each and every situation, including power failures, errors and crashes. To the outside world, a committed transaction appears (by its effects on the database) to be indivisible (“atomic”), and an aborted transaction does not happen.
+\item Consistency The consistency property ensures that any transaction will bring the database from one valid state to another. Any data written to the database must be valid according to all defined rules, including constraints, cascades, triggers, and any combination thereof. This does not guarantee correctness of the transaction in all ways the application programmer might have wanted (that is the responsibility of application-level code), but merely that any programming errors cannot result in the violation of any defined rules.
+\item Isolation The isolation property ensures that the concurrent execution of transactions results in a system state that would be obtained if transactions were executed sequentially, i.e., one after the other. Providing isolation is the main goal of concurrency control. Depending on the concurrency control method (i.e., if it uses strict - as opposed to relaxed - serializability), the effects of an incomplete transaction might not even be visible to another transaction.
+\item Durability The durability property ensures that once a transaction has been committed, it will remain so, even in the event of power loss, crashes, or errors. In a relational database, for instance, once a group of SQL statements execute, the results need to be stored permanently (even if the database crashes immediately thereafter). To defend against power loss, transactions (or their effects) must be recorded in a non-volatile memory.
+\end{itemize}
+
+\section{Knex}
+\subsubsection{Knex.JS}
+So far we have been writing a lot of SQLs and pass them as a string in Javascript. And then the library PgClient would query the database using the SQL we have input. It is working fine for simpler SQL. If we have more complex SQL, it is more error-prone to just write SQL query using string in javascript. And there is also no checking on the structure of the SQL we are writing.\\
+
+As a result , we are introducing Knex.js which is a SQL query bulder library for Javascript. You can install knex by the following command:
+\begin{lstlisting}
+  npm install knex pg
+\end{lstlisting}
+To connect to database using knex
+\begin{lstlisting}
+const knex = require('knex')({
+        client: 'postgresql',
+        connection: {
+            database: "fruits",
+            user: "accelerate",
+            password: "password"
+        }
+    });
+\end{lstlisting}
+\subsubsection{A simple Comparison}
+Let’s say we want to write a SQL like the following ,
+\begin{lstlisting}
+   SELECT * FROM users INNER JOIN groups  on users.group_id = users.id 
+                        INNER JOIN bookings on bookings.user_id = users.id 
+                        where users.status = 'active';
+\end{lstlisting}
+To write it using string in javascript, we can writing the following,
+\begin{lstlisting}
+ var client = new pg.Client('postgres://accelerate:password@localhost:5432/bookings');
+
+    client.connect();
+    // We have to write everything in one line because the backtick preserves the newline characters in the string.
+    var query = `SELECT * FROM users INNER JOIN groups  on users.group_id = groups.id INNER JOIN bookings on bookings.user_id = users.id where users.status = 'active'`;
+
+    client.query(query, function(err, results) {
+        if(err) {
+            console.log(err);
+        }
+
+        console.log(results.rows);
+    });
+\end{lstlisting}
+As you can see , the SQL becomes a very long string and we lose all the nice syntax highlighting that helps us distinguish keyword and table names/column names.\\
+
+However, the readability is much nicer if you do it in knex instead,
+\begin{lstlisting}
+ const knex = require('knex')({
+        client: 'postgresql',
+        connection: {
+            database: "bookings",
+            user: "accelerate",
+            password: "password"
+        }
+    });
+
+    let query = knex.select("*").from("users").innerJoin("groups","users.group_id","groups.id")
+                                  .innerJoin("bookings","bookings.user_id","users.id")
+                                  .where("user.status",'active');
+    console.log(query.toSQL()); // You can print the SQL in this way.
+
+    query.then((rows)=>{
+        // You can access the fetched row here.
+    }).catch((error)=>{
+        console.log(error);
+        //Handle the error here.
+    });
+\end{lstlisting}
+As you can see , Knex basically transforms the keyword to a method call in javascript in a fluent interface pattern which allows us to chain the method as we wish just like SQL.\\
+
+There is a knex Querylab that allows you to test your knex query online. The SQL box would show the SQL generated.\\
+
+And from the example above, you can see the block\\
+\begin{lstlisting}
+ var knex = require('knex')({
+        client: 'postgresql',
+        connection: {
+            database: "bookings",
+            user: "accelerate",
+            password: "password"
+        }
+    });
+\end{lstlisting}
+specifies the database client it is going to use. The connection detail of this connection is specified accordingly.
+\subsubsection{Common methods}
+\textbf{Query Builder}\\
+It contains the parts of the SQL that are regarded as DQL and DML Knex is flexible that allows you to specify your query in different manners.\\
+
+\textcolor{blue}{Select}\\
+To build a select Query , you can write your KnexJS in the following ways.
+\begin{lstlisting}
+// Using knex() the constructor.
+knex("table").column(["column1","column2","column3"])
+
+// Using select() method
+knex.select('column1','column2','column3').from('table')
+
+// Using the column() method
+knex.column('column1','column2','column3').select().from('table')
+\end{lstlisting}
+All Javascript query from above gives you the same SQL which is SELECT column1,column2,column3 FROM table; The knex Select query is very flexible which allows you to write the method in different orders.
+
+\textbf{Where method}\\
+We would of course also want to query the database with where method. Again , the where methods in knex also allow the devleopers to specify the method call in multiple ways.
+\begin{lstlisting}
+ knex.select("column1","column2","column3").from("table")
+        .where("column1","ABC")
+        .orWhere("column2",'>',"DEF")
+        .andWhere("column3","like","%AC%");
+\end{lstlisting}
+would give you the following SQL.
+\begin{lstlisting}
+ select "column1", "column2", "column3" from "table" 
+        where "column1" = 'abc' 
+        or "column2" > 'DEF' 
+        and "column3" like '%AC%'
+\end{lstlisting}
+The methods that are useful are where and orWhere methods. You can also use subquery in the following way:
+\begin{lstlisting}
+  knex.select("column1","column2","column3").from("table")
+        .where("column1","ABC")
+        .whereIn("table_2_id",function(){
+            this.select("id").from("table2")
+        });
+\end{lstlisting}
+would give you the following SQL
+\begin{lstlisting}
+  select "column1", "column2", "column3" from "table" 
+        where "column1" = 'ABC' 
+        and "table_2_id" in (
+            select "id" from "table2"
+        )
+\end{lstlisting}
+\textbf{Join/On method}\\
+To perform a SQL join in Knex is also very simple.
+\begin{lstlisting}
+  knex.select("column1","column2","column3").from("table")
+        .innerJoin("table2","table_2_id","table2.id")
+        .where("column1" , "ABC")
+\end{lstlisting}
+The above javascript method call gives you the following SQL:
+\begin{lstlisting}
+  select "column1", "column2", "column3" from "table" 
+        inner join "table2" on "table_2_id" = "table2"."id" where "column1" = 'ABC'
+\end{lstlisting}
+You can also use an extra function to declare complex joining condition.
+\begin{lstlisting}
+ knex.select("column1","column2","column3").from("table")
+        .innerJoin("table2",function(){
+            this.on('table.table_2_id','=','table2.id').onNotNull('table2.id')
+        }).where("column1","ABC")
+\end{lstlisting}
+The above javascript method call gives you the following SQL:
+\begin{lstlisting}
+  select "column1", "column2", "column3" from "table" 
+        inner join "table2" 
+        on "table"."table_2_id" = "table2"."id" 
+        and "table2"."id" is not null 
+        where "column1" = 'ABC'
+\end{lstlisting}
+\textbf{GroupBy/OrderBy/Distinct Method}\\
+The SQL clauses group by , order by and distinct are also usable in Knex library.
+\begin{lstlisting}
+ // Using order by
+    knex.select("column1","column2","column3").from("table").orderBy("column1");
+
+    // Using group by
+    knex.count("column1").column("column2").from("table").groupBy("column2")
+
+    // Using distinct 
+    knex.distinct("column1").from("table");
+\end{lstlisting}
+The above query would give the following SQLs respectively.
+\begin{lstlisting}
+ -- using order by 
+    select "column1","column2","column3" from "table" order by "column1"
+
+    -- using group by
+    select count("column1"), "column2" from "table" group by "column2"
+
+    -- using distinct
+    select distinct "column1" from "table"
+\end{lstlisting}
+
+\textcolor{blue}{Insert}\\
+To create a insert statement, you can use the following method call.
+\begin{lstlisting}
+   // Using knex() the constructor.
+    knex("table").insert({column1:"value1",column2:"value2",column3:"value3"})
+
+    // Using insert() method to start the method call
+    knex.insert({column1:"value1",column2:"value2",column3:"value3"}).into("table")
+\end{lstlisting}
+Both javascript method calls would yield the same sql.
+\begin{lstlisting}
+ insert into "table" ("column1","column2","column3") value ("value1","value2","value3");
+\end{lstlisting}
+You can also insert two rows at the same time by passing in an array instead.
+\begin{lstlisting}
+  knex.insert([
+        {column1:"value1",column2:"value2",column3:"value3"},
+        {column1:"value4",column2:"value5",column3:"value6"}
+    ]).into("table").returning("id"); // Returning id returns the id of the inserted row.
+\end{lstlisting}
+
+\textbf{Batch Insert}\\
+Sometimes we want to insert a large amount of rows at the same time, it is not appropriate to have all of the content in one sql because it is going to affect performance. In that case, we can insert those rows using the batchInsert method of knex.
+\begin{lstlisting}
+  var rows = [{column1:"value1",column2:"value2",column3:"value3"},{column1:"value4",column2:"value5",column3:"value6"}];
+    // The rows could be a lot more.
+    var batchSize = 30;
+    knex.batchInsert("table",rows,batchSize)
+        .returning('id')
+        .then((ids)=>{
+            // Handle the returning ids here.
+        })
+        .catch((error)=>{
+            // handle the error here.
+        });
+\end{lstlisting}
+The batchInsert also automatically wraps a batch of rows using a transaction. In the above case, a transaction is commited for every 30 rows inserted.\\
+
+\textcolor{blue}{Update}\\
+The update method call of knex is also intuitive in its design.
+\begin{lstlisting}
+knex("table").update({column1:"value1",column2:"value2"}).where("column3","value3")
+\end{lstlisting}
+The above javascript method call gives you the following sql.
+\begin{lstlisting}
+ update "table" set "column1" = 'value1', "column2" = 'value2' where "column3" = 'value3'
+\end{lstlisting}
+\textcolor{blue}{Delete}\\
+The same applies to the delete method call .
+\begin{lstlisting}
+   knex("table").where("column1","value1").delete();
+\end{lstlisting}
+The corresponding sql is as follow,
+\begin{lstlisting}
+ delete from "table" where "column1" = 'value1';
+\end{lstlisting}
+\textbf{Transaction}\\
+Transaction is a very important part in SQL. Knex has a fairly complete support on transaction. Using the example from knexjs official website :
+\begin{lstlisting}
+ var Promise = require('bluebird');
+
+    // Using trx as a query builder:
+    knex.transaction(function(trx) {
+
+        var books = [
+            {title: 'Canterbury Tales'},
+            {title: 'Moby Dick'},
+            {title: 'Hamlet'}
+        ];
+
+        return trx
+        .insert({name: 'Old Books'}, 'id')
+        .into('catalogues')
+        .then(function(ids) {
+            return Promise.map(books, function(book) {
+                book.catalogue_id = ids[0];
+
+                // Some validation could take place here.
+
+                return trx.insert(book).into('books');
+            });
+        });
+    })
+    .then(function(inserts) {
+        console.log(inserts.length + ' new books saved.');
+    })
+    .catch(function(error) {
+        // If we get here, that means that neither the 'Old Books' catalogues insert,
+        // nor any of the books inserts will have taken place.
+        console.error(error);
+    });
+\end{lstlisting}
+All of the sql run are within a single transaction. In case any one of them has a problem , the whole transaction is rolled back. Knex determines whether the transaction is commited back or rolled back by promise return. If the promise returned is rejected, the whole transaction is rollbacked. On the other hand , if the promise resolved without problem, the transaction is committed.\\
+
+\textcolor{blue}{transacting}
+The following block can also be written in the other way using transacting
+\begin{lstlisting}
+return trx
+    .insert({name: 'Old Books'}, 'id')
+    .into('catalogues')
+    .then(function(ids) {
+        return Promise.map(books, function(book) {
+            book.catalogue_id = ids[0];
+
+            // Some validation could take place here.
+
+            return trx.insert(book).into('books');
+        });
+    });
+\end{lstlisting}
+\begin{lstlisting}
+return knex
+    .insert({name: 'Old Books'}, 'id')
+    .into('catalogues')
+    .transacting(trx)
+    .then(function(ids) {
+        return Promise.map(books, function(book) {
+            book.catalogue_id = ids[0];
+
+            // Some validation could take place here.
+
+            return knex.insert(book).into('books').transacting('trx');
+        });
+    });
+\end{lstlisting}
+\subsubsection{SQL Query builder vs Plain SQL}
+The advantage of using sql query builder is that it saves your time on syntax checking on the keyword of sql. And in general the syntax highlighting of the javascript’s method is better than the SQL query wrapped in the Javascript string.
+
+
+\subsubsection{SQL Query builder vs ORM}
+Object relational mapping is another very common approach of simplifying sql-writing. We are not going to cover ORM at this moment because it is important for you to get used to the powerful feature of SQL like group by , having and subquery. If you are interested in learning more about ORM, we would recommend you to use Bookshelf.js which is an ORM based on knex.js
+\subsubsection{Conclusion}
+We talked about a lot of different method calls in Knex JS. You should get a rough idea how knex method is translated to SQL in general. We are going to cover more on the structure of a knex js.
 \subsection{Knex migrations CLI}
+\subsubsection{Install Migration CLI}
+First of all, we have to also install knex cli globally to allow us to use knex to generate a knex repository.
+\begin{lstlisting}
+  sudo npm install knex -g 
+\end{lstlisting}
+Then we have to create the project folder, let’s say your application is called myApp.
+\begin{lstlisting}
+  # Make folder myApp
+    mkdir myApp
+    cd myApp
+    # Init NPM repository
+    npm init
+    # Install knex to the NPM repository
+    npm install knex
+    # Run knex CLI to init the repo
+    knex init
+\end{lstlisting}
+The knex migration tool generates a file called knexfile.js which stores the config of your knex project. Here is the content of the knexfile.js.
+\begin{lstlisting}
+module.exports = {
+  development: {
+    client: 'postgresql',
+    connection: {
+      database: 'my_db',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
+  },
+
+  staging: {
+    client: 'postgresql',
+    connection: {
+      database: 'my_db',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
+  },
+
+  production: {
+    client: 'postgresql',
+    connection: {
+      database: 'my_db',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
+  }
+};
+\end{lstlisting}
+You can see from the above example that we have three different environments. A environment in knex holds the DB settings for your application in different environment. There are three environments generated by default
+\begin{itemize}
+\item development : It is the default environment for development. Therefore you have to input your development database information in this environment.
+\item staging : It is also called the beta or testing environment. It is normally the environment for your development team to do testing. You have to input the database information of the testing environment.
+\item production: It is the environment for your application in production. The database information should also accordingly be the production database information.
+\end{itemize}
+By default , knex-cli uses the development environment. You can change the environment you are using with the flag --env. For example, in a production environment, you have to run the following as a prefix for all other knex commands.
+\begin{lstlisting}
+   knex --env production
+\end{lstlisting}
+\subsubsection{Configuration}
+We can then focus to look at one configuration to understand what configurations are there within each environment:
+\begin{lstlisting}
+ development: {
+    client: 'postgresql',
+    connection: {
+      database: 'my_db',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    } 
+  }
+\end{lstlisting}
+\begin{itemize}
+\item client : The target database you are connecting to. Knex supports PostgreSQL, Sqlite , Mysql, MariaDB, Oracle and MSSQL which already includes all of the main SQL vendor in the market.
+\item connection : The connection details of the current connection
+        \begin{itemize}
+        \item database : The database name
+        \item user : The username
+        \item password : The password
+        \end{itemize}
+\item pool : The database pool configurations for your environment. We normally maintain a certain number of connections for our application instead of initiating a new connection for every request. It saves resource and enhances performance.You can read more about Connection pooling.
+        \begin{itemize}
+        \item min : The minimum number of connections that knex would maintain no matter what the loading is.
+        \item max : The maximum number of connections that knex would maintain in case of high loading.
+
+        \end{itemize}
+\end{itemize}
+
+\textcolor{blue}{Dotenv}\\
+
+It is possible to put our username, password, database name directly in this case. But it is not preferrable because we don’t want the username/password to be exposed in this case. Therefore , we are going to use a package called dotenv. To install the dotenv package:
+\begin{lstlisting}
+  npm install dotenv
+\end{lstlisting}
+And then in your knexfile.js
+\begin{lstlisting}
+require('dotenv').config();
+
+module.exports = {
+  development: {
+    client: 'postgresql',
+    connection: {
+      database: process.env.DB_NAME,
+      user:     process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    } 
+  },
+
+  staging: {
+    ...
+  },
+
+  production: {
+    ...
+  }
+};
+\end{lstlisting}
+What we are trying to do is to load the database name, username and password as the environmental variables. The package dotenv would load the file .env from your folder. In your .env file, you have to input the following,
+\begin{lstlisting}
+DB_NAME=test
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+\end{lstlisting}
+Please note that there is no space between and after the = sign. And then after you have called the method require('dotenv').config(), the environmental variables are then accessible at the object process.env.\\
+
+\textbf{Knex CLI}\\
+
+We can then use knex-cli to generate the next migration file. If you run knex help in your knex repository which is the folder you have run the command knex init. You are going to see the following output.
+\begin{lstlisting}
+  Usage: knex [options] [command]
+
+
+  Options:
+
+    -V, --version      output the version number
+    --debug            Run with debugging.
+    --knexfile [path]  Specify the knexfile path.
+    --cwd [path]       Specify the working directory.
+    --env [name]       environment, default: process.env.NODE_ENV || development
+    -h, --help         output usage information
+
+
+  Commands:
+
+    init [options]                         Create a fresh knexfile.
+    migrate:make [options] <name>          Create a named migration file.
+    migrate:latest                         Run all migrations that have not yet been run.
+    migrate:rollback                       Rollback the last set of migrations performed.
+    migrate:currentVersion                 View the current version for the migration.
+    seed:make [options] <name>             Create a named seed file.
+    seed:run                               Run seed files.
+\end{lstlisting}
+
+You can see there are two types of files we can created using knex-cli. The two types of files are the migration files and the seed files respectively.\\
+
+\textcolor{blue}{Migration files}\\
+
+Migrations are changes to the database schema. We can think of migration just like the revision control of a database. By using migration files to store the changes in the database. We can easily migrate older version of the database to the latest version.\\
+
+To create a new migration file , we can run the following:
+\begin{lstlisting}
+ knex migrate:make new-change-on-database
+\end{lstlisting}
+The command above generates a new migration file with the name <Timestamp>_new-change-on-database.js. Here is one possible example:
+\begin{lstlisting}
+Using environment: development
+Created Migration: /home/gordon/Codes/knexjs-test/migrations/20171227145233_new-change-on-database.js
+\end{lstlisting}
+Note that the timestamp is the unix timestamp for the generation time. So the migrations file are automatically ordered by the respective generation time. Please do not modify the timestamp by yourself. It is supposed to be read by the migration tools only.\\
+
+Within the file , the content is as follow,
+\begin{lstlisting}
+exports.up = function(knex, Promise) {
+  
+};
+
+exports.down = function(knex, Promise) {
+  
+};
+\end{lstlisting}
+The exports.up is exporting the function for the forward direction of the migration. So the up function is going to be run when you are telling knex-cli to migrate to the latest version of the database.\\
+
+The exports.down is exporting the function for the backward direction of the migration. The down function is going to be run when you are telling knex-cli to rollback to the previous version.\\
+
+The rule of thumb is that whatever is doing in the up function has to be completely undone by the down function. Otherwise inconsistencies could possibly occurs.\\
+
+The two parameters passed to the function is the knex connection object initialized using knexfile.js and the Promise is the Promise library object that allows you to use common Promise method like Promise.all().\\
+
+Because knex check for the status of your schema-altering promise to check if the process is successful or not. You always have to return your knex method-calling promise in both the up and down functions.
+\\
+
+\textbf{Schema Builder}
+In order to allow the developer to write the migration file properly, Knex actually comes with a schema builder which helps building DDL. DDL are the part of SQL that is responsible for defining the structure of the data.\\
+
+\textcolor{blue}{Crate Table}\\
+
+Here is one example of writing Schema Building to create table,
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+  return knex.schema.createTable('users',(table)=>{
+    table.increments();
+    table.string("name");
+    table.string("email");
+    table.timestamps(false,true);
+  });
+}
+
+exports.down = function(knex,Promise){
+  return knex.schema.dropTable('users');
+}
+\end{lstlisting}
+
+In the up function , we create a new table using the method call knex.schema.createTable(). And then within the function body , we go on to specify the columns details:
+\begin{itemize}
+\item table.increments() specifies the table has an id column that auto-increments
+\item table.string("name") specifies the table has an varchar column with the name name.
+\item table.string("email") specifies the table has an varchar column with the name email.
+\item table.timestamps(false,true) specifies the table would have a created_at , updated_at columns which is updated automatically during creation.
+\end{itemize}
+In the down function , we basically just drop the table to undo everything we have done within the up function.\\
+
+\textcolor{blue}{Adding Column}\\
+
+We can also use migration file to add a new foreign key column. Here is an example,
+\begin{lstlisting}
+exports.up = function(knex, Promise) {
+  return knex.schema.table('users',(table)=>{
+    table.integer('group_id').unsigned();
+    table.foreign('group_id').references('groups.id');
+  });
+};
+
+exports.down = function(knex, Promise) {
+  return knex.schema.table('users',(table)=>{
+    table.dropForeign('group_id');
+    table.dropColumn('group_id');
+  })
+};
+\end{lstlisting}
+We can use knex.schema.table() to access the table of the database. And then we use the methods of the table object again to add/drop column. The method table.integer('group_id') adds an integer column called group_idto the table users. The method table.foreign('group_id') adds a foreign constraint on the column group_id.\\
+
+\textbf{Running Migration}\\
+After you have finished writing your migration files, you should check in all these files in git in order to track them as part of your source code. Now you can regard your database structure also version-controlled.\\
+
+\textcolor{blue}{Migration to latest version}\\
+It is actually easy to run database migration. You can run the following command:
+\begin{lstlisting}
+  knex migrate:latest
+\end{lstlisting}
+Knex will migrate your database to the latest possible version by running all the up function. Note that THERE IS NO COMMAND IN KNEX THAT ALLOWS DEVELOPER TO MIGRATE ONLY ONE MIGRATION.\\
+
+\textcolor{blue}{Rollback migrations}\\
+To rollback last set of migrations , you can run the following command:
+\begin{lstlisting}
+knex migrate:rollback
+\end{lstlisting}
+Knex will migrate your database to the latest possible version by running all the up function. Note that THERE IS NO COMMAND IN KNEX THAT ALLOWS Knex will rollback your previous set of database migration by running the down function in your migrations files. That is the reason why is crucial to write also the down function correctly.\\
+
+\textcolor{blue}{Current Version}\\
+You can also check what is the current version of migration.
+\begin{lstlisting}
+  knex migrate:currentVersiont
+\end{lstlisting}
+
+\subsubsection{Development Environment Migration Flow}
+The normal flow of database migration which is applicable for development environment.\\
+
+\textbf{Creating Migration}\\
+
+1. Generate a new migration file by running the command
+\begin{lstlisting}
+ knex migrate:make <name-of-the-migration>
+\end{lstlisting}
+2. Write the corresponding up and down function in the migration file. The following content is an example.
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+  return knex.schema.createTable('users',(table)=>{
+    table.increments();
+    table.string("name");
+    table.string("email");
+    table.timestamps(false,true);
+  });
+}
+
+exports.down = function(knex,Promise){
+  return knex.schema.dropTable('users');
+}
+\end{lstlisting}
+3. Run Migration
+\begin{lstlisting}
+knex migrate:currentVersion
+  knex migrate:latest
+\end{lstlisting}
+4. Git Add , Git Commit and Git push to the collaborating repository
+\begin{lstlisting}
+ git add .
+  git commit -m "Commit message"
+  git push origin master
+\end{lstlisting}
+
+\textbf{Running Migration}\\
+
+The following is applicable for both development and production environment:\\
+
+5. The other collaborators run git pull origin master to get the latest changes. And then run the command to migrate to the latest version.
+\begin{lstlisting}
+ knex migrate:latest
+\end{lstlisting}
+
+\textbf{Seeding}\\
+
+Other than migrations, you can also generate seeding files for your project. Seeding are initial data that your application need in order to run your correctly. To generate a seeders file, you can run :
+\begin{lstlisting}
+ knex seed:make initial-user
+\end{lstlisting}
+initial-user is the name of this seeding. You should have different name for different seeders.The file initial-user.js should be generated within the folder seeds.The content should be as follow,
+\begin{lstlisting}
+exports.seed = function(knex, Promise) {
+  // Deletes ALL existing entries
+  return knex('table_name').del()
+    .then(function () {
+      // Inserts seed entries
+      return knex('table_name').insert([
+        {colName: 'rowValue1'},
+        {colName: 'rowValue2'},
+        {colName: 'rowValue3'}
+      ]);
+    });
+};
+\end{lstlisting}
+It is just like the migration function , the only difference is that you are going to create initial data for this application. Once you finish writing this , you can run the seeders file with the following command.
+\begin{lstlisting}
+  knex seed:run
+\end{lstlisting}
+It is going to run all of your seeders file.
+
+
 
 \section{Database Theory}
 \subsection{Introduction}
@@ -1538,12 +2318,96 @@ There are mainly three types of association. To illustrate the differences , we 
 
 \textbf{One-to-One}\\
 
+A one-to-one association can be defined by putting one table’s foreign key into another one. Here is the migration example for the head teacher and class example in above. Migration for classes:
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+    return knex.schema.createTable('classes',(table)=>{
+        table.increments();
+        table.string("name");
+        table.string("classroom");
+        table.string("period");
+        table.timestamps(false,true);
+    });
+}
+
+exports.down = function(knex,Promise){
+    return knex.schema.dropTable("classes")
+}
+\end{lstlisting}
+Migration for teachers:
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+    return knex.schema.createTable('teachers',(table)=>{
+        table.increments();
+        table.string("name");
+        // The unique is necessary to guarantee it is a one-to-one relation.
+        table.integer('class_id').unsigned().unique();
+        table.foreign('class_id').references('classes.id');
+        table.timestamps(false,true);
+    });
+}
+
+exports.down = function(knex,Promise){
+    return knex.schema.dropTable("teachers")
+}
+\end{lstlisting}
+Because the column class_id is marked as unique. Now each class_id can only appear once in the whole table. Thus one teacher (one row in teachers) can only correspond to one class (one row in classes).\\
+
 \textbf{Many-to-One and One-to-Many}\\
+
+I am going to reuse the table classes again in the previous example. And now we have to create migration for the table students.
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+    return knex.schema.createTable('students',(table)=>{
+        table.increments();
+        table.string("name");
+        //No unique is necessary because it is a one-to-many relation.
+        table.integer('class_id').unsigned();
+        table.foreign('class_id').references('classes.id');
+        table.timestamps(false,true);
+    });
+}
+
+exports.down = function(knex,Promise){
+    return knex.schema.dropTable("students")
+}
+\end{lstlisting}
+For one-to-many/many-to-one relations, the only difference in the table is that on the MANY side, you don’t need to constraint the class_id to be a unique value. Now the table students has multiple rows of data contains the same class_id. Thus many students are joined to one class.\\
 
 \textbf{Many-to-Many}\\
 
+Each Students can take multiple subjects at the same time while each subject can be taken by multiple students at the same time. Thus the entity relation between the students and subjects is many-to-many relation. A many-to-many relation would need a join table as the join table to connect both the students and the subjects table. We can call this table students_subjects.\\
 
+Let’s create the migration for the table subjects and students_subjects to show you that is actually possible to create multiple tables in one migration.
+\begin{lstlisting}
+exports.up = function(knex,Promise){
+    return knex.schema.createTable("subjects",(subjects)=>{
+        subjects.increments();
+        subjects.string("name");
+        subjects.timestamps(false,true);
+    }).then(()=>{
+        return knex.schema.createTable("students_subjects",(studentsSubjects)=>{
+            studentsSubjects.increments();
+            studentsSubjects.integer("student_id").unsigned();
+            studentsSubjects.foreign("student_id").references("students.id");
+            studentsSubjects.integer("subject_id").unsigned();
+            studentsSubjects.foreign("subject_id").references("subjects.id");
+        });
+    });
+}
+
+exports.down = function(knex,Promise){
+    return knex.schema.dropTable('students_subjects')
+            .then(()=>knex.schema.dropTable('subjects'));
+}
+\end{lstlisting}
+
+Basically, the Entity relation diagram(ERD) from the examples above is as follow:\\
+\includegraph{img/school_entities.png}\\
+You should also draw your own ERD to visualize your entity relation. You can check out a tools called LucidChart
 \subsection{Database Design}
+\subsubsection{Principles of designing your database}
+
 
 
 
@@ -1620,11 +2484,11 @@ In order to actually listen to events we also need to be able to emit them. Besi
 In our case we want to create a simple chat, that means the user will add messages, which would be an ideal event to listen for. So let?s edit the client side logic.
 \begin{lstlisting}
 <script>
-  $(function () {
+ \$(function () {
     var socket = io();
-    $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
+   \ $('form').submit(function(){
+      socket.emit('chat message', \$('#m').val());
+      \$('#m').val('');
       return false;
     });
   });
@@ -1653,15 +2517,15 @@ As you can see above all we do is listen for a message and then rebroadcast this
 Now we need to listen out on the client for the server broadcast and render the message to the user. Let?s update the html file.
 \begin{lstlisting}
 <script>
-  $(function () {
+  \$(function () {
     var socket = io();
-    $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
+    \$('form').submit(function(){
+      socket.emit('chat message', \$('#m').val());
+      \$('#m').val('');
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
+      \$('#messages').append(\$('<li>').text(msg));
     });
   });
 </script>
@@ -1694,7 +2558,7 @@ By default, SocketIO is using the namespace \textcolor{red}{/}. You can actually
 \begin{lstlisting}
 const namespace1 = io.of('/namespace1');  
 namespace1.on('connection',(socket)=>{
-  console.log(`Socket with id ${socket.id} connected!`);
+  console.log(`Socket with id \${socket.id} connected!`);
 });
 namespace1.emit('hello',"World!");
 \end{lstlisting}

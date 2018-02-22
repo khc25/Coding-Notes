@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.9.30)  22 FEB 2018 16:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.9.30)  22 FEB 2018 22:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1921,4 +1921,127 @@ Missing character: There is no Ä in font cmr10!
 Missing character: There is no ô in font cmr10!
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
-Missing character:
+Missing character: There is no ô in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 1387--1388
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1389--1390
+
+ []
+
+[37]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 1449--1450
+
+ []
+
+[38]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+<img/inner_join.png, id=1106, 150.5625pt x 84.6914pt>
+File: img/inner_join.png Graphic file (type png)
+<use img/inner_join.png>
+Package pdftex.def Info: img/inner_join.png  used on input line 1471.
+(pdftex.def)             Requested size: 150.56212pt x 84.69118pt.
+<img/right_outer_join.png, id=1108, 150.5625pt x 85.06781pt>
+File: img/right_outer_join.png Graphic file (type png)
+<use img/right_outer_join.png>
+Package pdftex.def Info: img/right_outer_join.png  used on input line 1484.
+(pdftex.def)             Requested size: 150.56212pt x 85.0676pt.
+ [39 <./img/inner_join.png>]
+<img/full_outer_join.png, id=1124, 150.5625pt x 85.44421pt>
+File: img/full_outer_join.png Graphic file (type png)
+<use img/full_outer_join.png>
+Package pdftex.def Info: img/full_outer_join.png  used on input line 1494.
+(pdftex.def)             Requested size: 150.56212pt x 85.444pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1502--1503
+
+ []
+
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 1509--1510
+
+ []
+
+[40 <./img/right_outer_join.png> <./img/full_outer_join.png>]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 1523--1524
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1525--1526
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1531--1532
+
+ []
+
+<img/transaction_states.png, id=1139, 453.695pt x 370.38374pt>
+File: img/transaction_states.png Graphic file (type png)
+<use img/transaction_states.png>
+Package pdftex.def Info: img/transaction_states.png  used on input line 1537.
+(pdftex.def)             Requested size: 453.6939pt x 370.38283pt.
+
+Overfull \hbox (108.6939pt too wide) in paragraph at lines 1536--1539
+[] 
+ []
+
+[41]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ô in font cmr10!
+ [42 <./img/transaction_states.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1560--1561
+
+ []
+
+[43]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ú in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ú in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+ [44]
+Underfull \hbox (badness 10000) in paragraph at lines 1621--1622
+
+ []
+
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missin
