@@ -1258,25 +1258,155 @@ The above command is only a shortform. Here is the full version of a generic com
 \end{lstlisting}
 
 \subsubsection{Setting up user}
+Please note that the following commands are run in PSQL Shell. In order for you to login to postgresql server easier without switching to the postgres user all the time. We recommend you to create a username same as your username in bash. By peer authentication process, you can then login to postgresql without any problem.
+\begin{lstlisting}
+CREATE USER <your-user-name> WITH PASSWORD 'password' SUPERUSER;
+\end{lstlisting}
+Afterwards double check the user was created
+\begin{lstlisting}
+ \ du
+\end{lstlisting}
+\subsubsection{Creating tables}
+Once you created a database you can add tables to it using CREATE TABLE
+\begin{lstlisting}
+CREATE TABLE citrus (
+    id SERIAL primary key,
+    name VARCHAR(255) not null,
+    color VARCHAR(255),
+    taste VARCHAR(255)
+);
+\end{lstlisting}
+As you can see from the code above, we write every PostgreSQL related command in all capital letters. This makes it easier to read once you have a lot of commands.\\
 
+SERIAL means that the counter ‘id’ increases with every row. primary key defines that id is the unique key by which each row can be identified.\\
+
+VARCHAR(255) indicates that the column will be filled with text of a not predefined length. 255 indicates the maximum length the text can have.\\
+
+not null tells PostgreSQL this value cannot be empty.\\
+
+To delete a table:
+\begin{lstlisting}
+DROP TABLE <the_tablename_you_want_to_delete>;
+\end{lstlisting}
+After you have finished the operations, you can use the following command to leave postgresql shell.
+\begin{lstlisting}
+\ q
+\end{lstlisting}
 \begin{eg}
 
 \end{eg}
 
-\subsection{Adding, updating and deleting data}
+\subsubsection{Adding, updating and deleting data}
+INSERT is the command we need to add data to our table. We need to specify the table, as well as the columns we are filling with data.
+\begin{lstlisting}
+INSERT INTO citrus (name, color, taste) VALUES ('lemon', 'yellow', 'sour');
+INSERT INTO citrus (name, color, taste) VALUES ('orange', 'orange', 'juicy');
+INSERT INTO citrus (name, color, taste) VALUES ('grapefruit', 'orange', 'bitter');
+INSERT INTO citrus (name, color, taste) VALUES ('lime', 'green', 'sour');
+INSERT INTO citrus (name, color, taste) VALUES ('tangerine', 'yellow', 'sweet');
+\end{lstlisting}
+To update we use the UPDATE command
+\begin{lstlisting}
+UPDATE citrus SET color = 'orange' WHERE color = 'yellow';
+\end{lstlisting}
+To delete we use DELETE
+\begin{lstlisting}
+DELETE FROM citrus WHERE name = 'tangerine';
+\end{lstlisting}
 
-\subsection{Querying data}
+\subsubsection{Querying data}
+To query data we can use the SELECT command.
+\begin{lstlisting}
+SELECT * FROM citrus;
 
-\begin{eg}
+ id |    name    | color  | taste
+----+------------+--------+--------
+  1 | lemon      | yellow | sour
+  2 | orange     | orange | juicy
+  3 | grapefruit | orange | bitter
+  4 | lime       | green  | sour
+\end{lstlisting}
+Using SELECT * FROM selects everything from the table.\\
 
-\end{eg}
+To limit our search to a some specific columns we can extend the SELECT statement.
+\begin{lstlisting}
+SELECT * FROM citrus WHERE color = 'orange';
+
+id |    name    | color  | taste
+----+------------+--------+--------
+ 2 | orange     | orange | juicy
+ 3 | grapefruit | orange | bitter
+\end{lstlisting}
+We can extend the WHERE statement more, with operators or AND, OR clauses
+\begin{lstlisting}
+SELECT * FROM citrus WHERE color = 'orange' AND id > 2 OR color = 'green';
+
+id |    name    | color  | taste
+----+------------+--------+--------
+ 3 | grapefruit | orange | bitter
+ 4 | lime       | green  | sour
+\end{lstlisting}
 
 \subsection{Node \& PostgreSQL}
 \subsubsection{PostgreSQL}
+It wouldn’t be much fun if we couldn’t connect postgres with node, so let’s do that. We will use the pg package.
+\begin{lstlisting}
+npm install --save pg
+\end{lstlisting}
+Then hook it up
+\begin{lstlisting}
+var pg = require('pg');
+
+var config = {
+    user: '<your-user-name>',
+    database: 'fruits',
+    password: 'password',
+    host: 'localhost',
+    port: 5432,
+    max: 10, // max number of clients in the pool
+    idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+}
+
+var client = new pg.Client(config);
+
+client.connect();
+\end{lstlisting}
+Now we can query our database
+\begin{lstlisting}
+client.query('SELECT * FROM citrus', function(err, results) {
+    if(err) {
+        console.log(err);
+    }
+    console.log(results.rows);
+})
+\end{lstlisting}
 \begin{eg}
 
 \end{eg}
 \subsubsection{SQL injection}
+You will want to enter a lot of user input into your table, which is input you cannot necessarily trust. If the user inserts any SQL commands via the input, they might run and mess with your table. Just imagine you receive an input DROP TABLE users; your whole user database would be gone. It is therefore necessary to protect against SQL injection, by transforming all user input to a string, so it cannot run. Luckily pg takes care of that for us, if we use it properly.\\
+
+Btw if you wonder who tries to do SQL injection, here is an example of the British company registry\\
+
+\begin{lstlisting}
+function getFruit(fruit, color) {
+    var client = new pg.Client('postgres://accelerate:password@localhost:5432/fruits');
+
+    client.connect();
+    var query = 'SELECT * FROM citrus WHERE name = $1 AND color = $2;';
+
+    client.query(query, [fruit, color], function(err, results) {
+        if(err) {
+            console.log(err);
+        }
+
+        console.log(results.rows);
+    });
+}
+\end{lstlisting}
+We pass the client.query an array as a second argument, and tell pg the index via \$.
+
+
 \subsection{SQL joins}
 When there are more than one table in a database, we have to establish relation between them. We are using primary and foreign key to establish relation among different tables.
 \subsubsection{Primary Key and Foreign Key}
@@ -1284,13 +1414,110 @@ Primary key is a unique identifier for each row of data. You have already encoun
 
 Foreign key simply means the primary keys of the other table. They are fundamental to linking two SQL tables together. To join two tables together using foreign key, we normally use the SQL Join. We have other ways like sub-queries to achieve the same thing. But SQL Join is the preferable way of doing this.
 \subsubsection{Join}
+Consider you have the following two tables:
+\begin{lstlisting}
+stock:
+id | quantity | price | citrus_id
+----+----------+-------+-----------
+  1 |       33 |    25 |         1
+  2 |       50 |    15 |         2
+  3 |       10 |    35 |         3
+  4 |        0 |    20 |         4
+citrus:
+  id |    name    | color  | taste
+ ----+------------+--------+--------
+   1 | lemon      | yellow | sour
+   2 | orange     | orange | juicy
+   3 | grapefruit | orange | bitter
+   4 | lime       | green  | sour
+\end{lstlisting}
+How can you combine information from the two? You need to join the two tables together. As you can see the stock table has a row with citrus\_id keys, which correspond to the id keys in the citrus table. Let’s try to find out the price of every fruit.
+\begin{lstlisting}
+SELECT citrus.name AS citrus_name, stock.price AS stock_price
+FROM citrus
+JOIN stock
+ON citrus.id = stock.citrus_id;
+
+citrus_name | stock_price
+-------------+-------------
+lemon       |          25
+orange      |          15
+grapefruit  |          35
+lime        |          20
+\end{lstlisting}
 \subsubsection{Different type of JOINs}
-\begin{eg}
+There are four different types of JOINs in SQL and they serve for different purpose. Coding Horror has a nice visual summary of the different JOIN options.\\
 
-\end{eg}
+A JOIN clause is as following format:
+\begin{lstlisting}
+  JOIN stock on leftTable.column = rightTable.column
+\end{lstlisting}
+All of the following JOINs are going to join row together if leftTable.column = rightTable.column. The only difference lies in what happen when either one of them is null.
+\begin{itemize}
+\item INNER JOIN : Join the rows only if both leftTable.column and rightTable.column are not null
+\item LEFT OUTER JOIN : Join the rows only if leftTable.column is not null. It does not matter whether rightTable.column is null or not.
+\item RIGHT OUTER JOIN: Join the rows only if rightTable.column is not null. It does not matter whether leftTable.column is null or not.
+\item FULL OUTER JOIN : Join the rows if rightTable.column is not null or leftTable.column is not null.
+\end{itemize}
+
+\subsubsection{JOINs query examples}
+Let’s say we have a table called users and a table called groups. One group can normally contain multiple users.
+\begin{itemize}
+\item If every user belongs to 1 group only, and every group has at least 1 user.
+\begin{lstlisting}
+SELECT * FROM users INNER JOIN groups ON users.group_id = groups.id;
+\end{lstlisting}
+The intersection part (purple color) is the area of data that are INNER joined.\\
+\includegraphics{img/inner_join.png}
+\end{itemize}
+
+
+\begin{itemize}
+\item If some users do not have a group, but every group has at least 1 user.
+\begin{lstlisting}
+SELECT * FROM users RIGHT OUTER JOIN groups ON users.group_id = groups.id;
+\end{lstlisting}
+Here is the query in opposite direction
+\begin{lstlisting}
+SELECT * FROM groups LEFT OUTER JOIN users ON groups.id = users.group_id;
+\end{lstlisting}
+\includegraphics{img/right_outer_join.png}
+\end{itemize}
+
+
+\begin{itemize}
+\item If some users do not have a group, and not every group has users.
+\begin{lstlisting}
+SELECT * FROM users FULL OUTER JOIN groups ON users.group_id = groups.id;
+\end{lstlisting}
+The whole blue area is the data that is FULL OUTER joined.\\
+\includegraphics{img/full_outer_join.png}
+\end{itemize}
+
+
 \subsection{Transaction}
-\subsubsection{Database Transactior}
+A Transaction is a unit of work performed which normally includes batch of command that you want to run reliabily independent of other transaction.
+\subsubsection{Database Transaction}
+Any change on the data of the database can be represented by as a transaction. But normally transactions is used to make sure two things:\\
 
+\begin{enumerate}
+\item To make sure multiple changes on the data to either succeed completely or fail completely. Therefore no partial changes exists when a transaction is completed or failed.
+\item To make sure that concurrent access on the data will not corrupt the data in an unexpected way. Hence either the changes on the data is completed successfully. Or the data is failed completely.
+\end{enumerate}
+
+The best way to understand this concept is through a hypothetical scenario of doing a bank transfer between two person, Alice and Bob. Let’s say Alice has $1000 in her account, she wants to transfer it to Bob. Therefore she logged in to the E-Banking platform to perform the transfer. There are two trivial steps for this transfer which are as follow,\\
+
+\begin{enumerate}
+\item Withdraw $\$1000$ from Alice Account
+\item Deposit $\$1000$ to Bob Account
+\end{enumerate}
+
+The hypothetical SQL that are going to be run are as follow
+
+\begin{lstlisting}
+ UPDATE bank_accounts SET amount = amount - 1000 WHERE account_holder = 'Alice';
+ UPDATE bank_accounts SET amount = amount + 1000 WHERE account_holder = 'Bob';
+\end{lstlisting}
 
 \section{Knex}
 \subsection{Knex.JS}
