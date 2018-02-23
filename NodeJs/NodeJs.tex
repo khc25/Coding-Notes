@@ -2129,7 +2129,7 @@ To create a new migration file , we can run the following:
 \begin{lstlisting}
  knex migrate:make new-change-on-database
 \end{lstlisting}
-The command above generates a new migration file with the name <Timestamp>_new-change-on-database.js. Here is one possible example:
+The command above generates a new migration file with the name <Timestamp>\_new-change-on-database.js. Here is one possible example:
 \begin{lstlisting}
 Using environment: development
 Created Migration: /home/gordon/Codes/knexjs-test/migrations/20171227145233_new-change-on-database.js
@@ -2183,7 +2183,7 @@ In the up function , we create a new table using the method call knex.schema.cre
 \item table.increments() specifies the table has an id column that auto-increments
 \item table.string("name") specifies the table has an varchar column with the name name.
 \item table.string("email") specifies the table has an varchar column with the name email.
-\item table.timestamps(false,true) specifies the table would have a created_at , updated_at columns which is updated automatically during creation.
+\item table.timestamps(false,true) specifies the table would have a created\_at , updated\_at columns which is updated automatically during creation.
 \end{itemize}
 In the down function , we basically just drop the table to undo everything we have done within the up function.\\
 
@@ -2205,7 +2205,7 @@ exports.down = function(knex, Promise) {
   })
 };
 \end{lstlisting}
-We can use knex.schema.table() to access the table of the database. And then we use the methods of the table object again to add/drop column. The method table.integer('group_id') adds an integer column called group_idto the table users. The method table.foreign('group_id') adds a foreign constraint on the column group_id.\\
+We can use knex.schema.table() to access the table of the database. And then we use the methods of the table object again to add/drop column. The method table.integer('group\_id') adds an integer column called group\_idto the table users. The method table.foreign('group\_id') adds a foreign constraint on the column group\_id.\\
 
 \textbf{Running Migration}\\
 After you have finished writing your migration files, you should check in all these files in git in order to track them as part of your source code. Now you can regard your database structure also version-controlled.\\
@@ -2351,7 +2351,7 @@ exports.down = function(knex,Promise){
     return knex.schema.dropTable("teachers")
 }
 \end{lstlisting}
-Because the column class_id is marked as unique. Now each class_id can only appear once in the whole table. Thus one teacher (one row in teachers) can only correspond to one class (one row in classes).\\
+Because the column class\_id is marked as unique. Now each class\_id can only appear once in the whole table. Thus one teacher (one row in teachers) can only correspond to one class (one row in classes).\\
 
 \textbf{Many-to-One and One-to-Many}\\
 
@@ -2372,13 +2372,13 @@ exports.down = function(knex,Promise){
     return knex.schema.dropTable("students")
 }
 \end{lstlisting}
-For one-to-many/many-to-one relations, the only difference in the table is that on the MANY side, you don’t need to constraint the class_id to be a unique value. Now the table students has multiple rows of data contains the same class_id. Thus many students are joined to one class.\\
+For one-to-many/many-to-one relations, the only difference in the table is that on the MANY side, you don’t need to constraint the class\_id to be a unique value. Now the table students has multiple rows of data contains the same class\_id. Thus many students are joined to one class.\\
 
 \textbf{Many-to-Many}\\
 
-Each Students can take multiple subjects at the same time while each subject can be taken by multiple students at the same time. Thus the entity relation between the students and subjects is many-to-many relation. A many-to-many relation would need a join table as the join table to connect both the students and the subjects table. We can call this table students_subjects.\\
+Each Students can take multiple subjects at the same time while each subject can be taken by multiple students at the same time. Thus the entity relation between the students and subjects is many-to-many relation. A many-to-many relation would need a join table as the join table to connect both the students and the subjects table. We can call this table students\_subjects.\\
 
-Let’s create the migration for the table subjects and students_subjects to show you that is actually possible to create multiple tables in one migration.
+Let’s create the migration for the table subjects and students\_subjects to show you that is actually possible to create multiple tables in one migration.
 \begin{lstlisting}
 exports.up = function(knex,Promise){
     return knex.schema.createTable("subjects",(subjects)=>{
